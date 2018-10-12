@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>i.Assist | Home</title>
+<title>W3.CSS Template</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -19,7 +19,7 @@ body, html {
 .bgimg-1 {
     background-position: center;
     background-size: cover;
-    background-color: lightblue;
+    background-image: url('static/3.jpg');
     min-height: 100%;
 }
 .w3-bar .w3-button {
@@ -68,7 +68,8 @@ body, html {
     }   
     .search-query:focus{
         width: 260px;
-    }  
+    }   
+
 </style>
 <body>
 
@@ -103,36 +104,29 @@ body, html {
   <a href="#sign in" onclick="w3_close()" class="w3-bar-item w3-button">SIGN IN</a>
   <a href="#sign up" onclick="w3_close()" class="w3-bar-item w3-button">SIGN UP</a>
   
-
 </nav>
-
 
 
 <!-- Home Section -->
 <!-- Header with full-height image -->
 <header class="bgimg-1 w3-display-container w3-grayscale-min" id="home">
   <center>
-  <br><br><br><br><br><br>
-  <div class="w3-display-center w3-text-white" style="padding:48px">
-    <span class="w3-jumbo w3-hide-small">i.Assist</span><br>
-    <span class="w3-xxlarge w3-hide-large w3-hide-medium">Start something that matters</span><br>
+  <div class="w3-display-middle w3-text-white" style="padding:48px">
+    <span align="center" class="w3-jumbo w3-hide-small">i.Assist</span><br>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+<form class="classNameHere" role="search">
+      <div class="input-group">
+      <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term" style="
+    height: 34px;">
+      <div class="input-group-btn">
+        <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+      </div>
+    </div>
+    </form>
+        
   </div> 
-
-  <div class="row">
-  	<div class="col-md-6">
-  		<form>
-  			<input type="text" class="form-control" placeholder="Search" style="width:300px; height:40px;">
-  			<input type="submit" class="btn btn-success" value="Search" style="height:40px;">
-  		</form>
-  	</div>
-  </div>
   </center>
 </header>
-
-
-
-
-
 
 
 
@@ -173,7 +167,7 @@ body, html {
   <div class="w3-row-padding w3-grayscale" style="margin-top:64px">
   <div class="w3-col l3 m6 w3-margin-bottom">
   <div class="w3-card">
-  <img src="/w3images/team1.jpg" alt="Riel Joseph" style="width:100%">
+  <img src="static/reil.jpg" alt="Riel Joseph" style="width:100%; height: 347px;">
   <div class="w3-container">
   <h3>Riel Joseph Bulaybulay</h3>
   <p class="w3-opacity">Designer</p>
@@ -184,7 +178,7 @@ body, html {
   </div>
   <div class="w3-col l3 m6 w3-margin-bottom">
   <div class="w3-card">
-  <img src="/w3images/team1.jpg" alt="Gwendel" style="width:100%">
+  <img src="static/bro.jpg" alt="Gwendel" style="width:100%; height: 347px;">
   <div class="w3-container">
   <h3>Gwendel Seguerra Cajes</h3>
   <p class="w3-opacity">Designer</p>
@@ -195,9 +189,9 @@ body, html {
   </div>
   <div class="w3-col l3 m6 w3-margin-bottom">
   <div class="w3-card">
-  <img src="/w3images/team3.jpg" alt="Robert Anthony" style="width:100%">
+  <img src="static/raj.jpg" alt="Robert Anthony" style="width:100%; height: 347px;">
   <div class="w3-container">
-  <h3>Robert Anthony Merca</h3>
+  <h3 >Robert Anthony Merca</h3>
   <p class="w3-opacity">Designer</p>
   <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
   <p><button class="w3-button w3-light-grey w3-block"><i class="fa fa-envelope"></i> Contact</button></p>
@@ -206,7 +200,7 @@ body, html {
   </div>
   <div class="w3-col l3 m6 w3-margin-bottom">
   <div class="w3-card">
-  <img src="/w3images/team4.jpg" alt="Greggy Jane" style="width:100%">
+  <img src="static/greggy.jpg" alt="Greggy Jane" style="width:100%; height: 347px;">
   <div class="w3-container">
   <h3>Greggy Jane Gac-ang</h3>
   <p class="w3-opacity">Designer</p>
@@ -217,7 +211,7 @@ body, html {
   </div>
   <div class="w3-col l3 m6 w3-margin-bottom">
   <div class="w3-card">
-  <img src="/w3images/team4.jpg" alt="Diana Rose" style="width:100%">
+  <img src="static/diane.jpg" alt="Diana Rose" style="width:100%; height: 347px;">
   <div class="w3-container">
   <h3>Diana Rose Palomares</h3>
   <p class="w3-opacity">Designer</p>
