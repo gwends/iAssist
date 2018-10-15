@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+
+{% block link %}
+<link rel="stylesheet" href="{{url_for('static',filename='css/job_apply.css')}}">
+{{super()}}
+{% endblock link %}
+
+
+{% block page_content %}
+
+<div class="register">
+    <div class="row">
+        <div class="col-md-3 register-left mb-5">
+            <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt="" />
+            <h3>Welcome</h3>
+            <p>You are 30 seconds away from earning your own money!</p>
+            <a href="{{url_for('index')}}" class="btn btn-lg btn-primary">Home</a>
+        </div>
+        <div class="col-md-9 register-right">
+            <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+                <li class="nav-item ml-2">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+                        aria-selected="true">Employee</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+                        aria-selected="false"> Hirer</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <h3 class="register-heading">Job Post as a Employee</h3>
+                    <form action="" method="POST">
+                        {{ eform.hidden_tag() }}
+                        <div class="row register-form">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    {{ eform.title(class="form-control", placeholder="Job Title*", autocorrect="off",
+                                    autocomplete="off") }}
+                                    {% if eform.title.errors %}
+                                    {% for error in eform.title.errors %}
+                                    <p class="text-danger">{{error}}</p>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {{ eform.address(class="form-control", placeholder="Address*", autocorrect="off",
+                                    autocomplete="off") }}
+                                    {% if eform.address.errors %}
+                                    {% for error in eform.address.errors %}
+                                    <p class="text-danger">{{error}}</p>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {{ eform.salary_price(class="form-control", placeholder="Salary/Wage*",
+                                    autocorrect="off",
+                                    autocomplete="off") }}
+                                    {% if eform.salary_price.errors %}
+                                    {% for error in eform.salary_price.errors %}
+                                    <p class="text-danger">{{error}}</p>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {{ eform.salary_category(class="form-control",
+                                    autocorrect="off",
+                                    autocomplete="off") }}
+                                    {% if eform.salary_category.errors %}
+                                    {% for error in eform.salary_category.errors %}
+                                    <p class="text-danger">{{error}}</p>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {{ eform.contact_details(class="form-control",
+                                    autocorrect="off",
+                                    autocomplete="off", placeholder="Contact Number*") }}
+                                    {% if eform.contact_details.errors %}
+                                    {% for error in eform.contact_details.errors %}
+                                    <p class="text-danger">{{error}}</p>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group mb-4">
+                                    {{ eform.description(class="form-control",
+                                    autocorrect="off",
+                                    autocomplete="off", placeholder="Job Description*", rows="9", style="resize:
+                                    none;") }}
+                                    {% if eform.description.errors %}
+                                    {% for error in eform.description.errors %}
+                                    <p class="text-danger">{{error}}</p>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                {{ eform.submit(class='btnRegister', value="Post")}}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <h3 class="register-heading">Job Post as a Hirer</h3>
+                    <div class="row register-form">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="First Name *" value="" />
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Last Name *" value="" />
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control" placeholder="Email *" value="" />
+                            </div>
+                            <div class="form-group">
+                                <input type="text" maxlength="10" minlength="10" class="form-control" placeholder="Phone *"
+                                    value="" />
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="password" class="form-control" placeholder="Password *" value="" />
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" placeholder="Confirm Password *" value="" />
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control">
+                                    <option class="hidden" selected disabled>Please select your Sequrity Question</option>
+                                    <option>What is your Birthdate?</option>
+                                    <option>What is Your old Phone Number</option>
+                                    <option>What is your Pet Name?</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="`Answer *" value="" />
+                            </div>
+                            <input type="submit" class="btnRegister" value="Register" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock page_content %}
