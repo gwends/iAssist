@@ -19,7 +19,7 @@
         </div>
         <div class="col-md-9 register-right">
             <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
-                <li class="nav-item ml-2">
+                <li class="nav-item ml-4">
                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
                         aria-selected="true">Employee</a>
                 </li>
@@ -101,44 +101,73 @@
                 </div>
                 <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                     <h3 class="register-heading">Job Post as a Hirer</h3>
-                    <div class="row register-form">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="First Name *" value="" />
+                    <form action="" method="POST">
+                        {{ eform.hidden_tag() }}
+                        <div class="row register-form">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    {{ eform.title(class="form-control", placeholder="Job Title*", autocorrect="off",
+                                    autocomplete="off") }}
+                                    {% if eform.title.errors %}
+                                    {% for error in eform.title.errors %}
+                                    <p class="text-danger">{{error}}</p>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {{ eform.address(class="form-control", placeholder="Address*", autocorrect="off",
+                                    autocomplete="off") }}
+                                    {% if eform.address.errors %}
+                                    {% for error in eform.address.errors %}
+                                    <p class="text-danger">{{error}}</p>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {{ eform.salary_price(class="form-control", placeholder="Salary/Wage*",
+                                    autocorrect="off",
+                                    autocomplete="off") }}
+                                    {% if eform.salary_price.errors %}
+                                    {% for error in eform.salary_price.errors %}
+                                    <p class="text-danger">{{error}}</p>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {{ eform.salary_category(class="form-control",
+                                    autocorrect="off",
+                                    autocomplete="off") }}
+                                    {% if eform.salary_category.errors %}
+                                    {% for error in eform.salary_category.errors %}
+                                    <p class="text-danger">{{error}}</p>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {{ eform.contact_details(class="form-control",
+                                    autocorrect="off",
+                                    autocomplete="off", placeholder="Contact Number*") }}
+                                    {% if eform.contact_details.errors %}
+                                    {% for error in eform.contact_details.errors %}
+                                    <p class="text-danger">{{error}}</p>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group mb-4">
+                                    {{ eform.description(class="form-control",
+                                    autocorrect="off",
+                                    autocomplete="off", placeholder="Job Description*", rows="9", style="resize:
+                                    none;") }}
+                                    {% if eform.description.errors %}
+                                    {% for error in eform.description.errors %}
+                                    <p class="text-danger">{{error}}</p>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                {{ eform.submit(class='btnRegister', value="Post")}}
                             </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Last Name *" value="" />
-                            </div>
-                            <div class="form-group">
-                                <input type="email" class="form-control" placeholder="Email *" value="" />
-                            </div>
-                            <div class="form-group">
-                                <input type="text" maxlength="10" minlength="10" class="form-control" placeholder="Phone *"
-                                    value="" />
-                            </div>
-
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="password" class="form-control" placeholder="Password *" value="" />
-                            </div>
-                            <div class="form-group">
-                                <input type="password" class="form-control" placeholder="Confirm Password *" value="" />
-                            </div>
-                            <div class="form-group">
-                                <select class="form-control">
-                                    <option class="hidden" selected disabled>Please select your Sequrity Question</option>
-                                    <option>What is your Birthdate?</option>
-                                    <option>What is Your old Phone Number</option>
-                                    <option>What is your Pet Name?</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="`Answer *" value="" />
-                            </div>
-                            <input type="submit" class="btnRegister" value="Register" />
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
