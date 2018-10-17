@@ -84,3 +84,15 @@ class HirerJobPostForm(FlaskForm):
         ]
     )
     submit = SubmitField('Post Job')
+
+
+class SearchForm(FlaskForm):
+    search = StringField(
+        '',
+        validators=[
+
+        ]
+    )
+    submit = SubmitField(
+        'Search'
+    )

@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template
 
-from app.forms import EmployeeJobPostForm, HirerJobPostForm
+from app.forms import EmployeeJobPostForm, HirerJobPostForm, SearchForm
 
 
 @app.route('/')
@@ -18,4 +18,5 @@ def job_apply():
 
 @app.route('/job_search')
 def job_search():
-    return render_template('job_search.html', title='Job Search')
+    search = SearchForm()
+    return render_template('job_search.html', title='Job Search', sform=search)

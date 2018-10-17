@@ -1,27 +1,14 @@
-body {
-    background-color: #eeeeee;
+html, body {
+    margin: 0;
+    padding: 0;
 }
 
-.h7 {
-    font-size: 0.8rem;
+.form-control-borderless {
+    border: none;
 }
 
-.gedf-wrapper {
-    margin-top: 0.97rem;
-}
-
-@media (min-width: 992px) {
-    .gedf-main {
-        padding-left: 4rem;
-        padding-right: 4rem;
-    }
-    .gedf-card {
-        margin-bottom: 2.77rem;
-    }
-}
-
-/**Reset Bootstrap*/
-.dropdown-toggle::after {
-    content: none;
-    display: none;
+.form-control-borderless:hover, .form-control-borderless:active, .form-control-borderless:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
 }
