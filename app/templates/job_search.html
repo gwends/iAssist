@@ -38,11 +38,11 @@
 
     {% for job in jobs %}
 
-    <div class="card">
+    <div class="card mb-5">
         <div class="card-body">
             <h5 class="card-title">{{ job.title }}</h5>
             <h6 class="card-subtitle mb-2 text-muted">{{job.author}}</h6>
-            <p class="card-text">{{ job.description }}</p>
+            <p class="card-text">{{ job.description | truncate(40) | safe }}</p>
             <a href="#" class="card-link">Card link</a>
             <a href="#" class="card-link">Another link</a>
         </div>

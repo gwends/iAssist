@@ -95,7 +95,7 @@ class SearchForm(FlaskForm):
     search = StringField(
         '',
         validators=[
-
+            DataRequired()
         ]
     )
     submit = SubmitField(

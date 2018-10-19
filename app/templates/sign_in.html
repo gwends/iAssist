@@ -9,7 +9,6 @@
         <div class="form-group">
             {{ form.username.label }}
             {{ form.username(class="form-control", placeholder="Enter Username") }}
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
             {% if form.username.errors %}
             {% for error in form.username.errors %}
             <p class="text-danger">{{error}}</p>

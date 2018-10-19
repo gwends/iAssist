@@ -29,8 +29,15 @@ def job_apply():
     eForm = EmployeeJobPostForm()
     hForm = HirerJobPostForm()
     if eForm.validate_on_submit():
-        post = Job_Post(title=hForm.title.data, address=hForm.address.data, salary_price=hForm.salary_price.data,
-                        salary_category=hForm.salary_category.data, description=hForm.description.data, author=current_user)
+        post = Job_Post(title=eForm.title.data, address=eForm.address.data, salary_price=eForm.salary_price.data,
+                        salary_category=eForm.salary_category.data, description=eForm.description.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Successfully Posted the job.')
+        return redirect(url_for('index'))
+    if hForm.validate_on_submit():
+        post = Job_Offer(title=hForm.title.data, address=hForm.address.data, salary_price=hForm.salary_price.data,
+                         salary_category=hForm.salary_category.data, description=hForm.description.data, author=current_user)
         db.session.add(post)
         db.session.commit()
         flash('Successfully Posted the job.')
