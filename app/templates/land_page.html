@@ -23,9 +23,15 @@
             <a href="#home" class="w3-bar-item w3-button">HOME</a>
             <a href="#about" class="w3-bar-item w3-button"> ABOUT</a>
             <a href="#team" class="w3-bar-item w3-button"> TEAM</a>
-            <a href="{{ url_for('job_apply') }}" class="w3-bar-item w3-button"> JOB APPLY</a>
-            <a href="#sign in" class="w3-bar-item w3-button"> SIGN IN</a>
-            <a href="#sign up" class="w3-bar-item w3-button"> SIGN UP</a>
+
+            {% if current_user.is_anonymous %}
+            <a href="{{ url_for('sign_in') }}" class="w3-bar-item w3-button"> SIGN IN</a>
+            <a href="{{ url_for('sign_up') }}" class="w3-bar-item w3-button"> SIGN UP</a>
+            {% else %}
+            <a href="{{ url_for('job_search') }}" class="w3-bar-item w3-button"> JOB SEARCH</a>
+            <a href="{{ url_for('job_apply') }}" class="w3-bar-item w3-button"> JOB POST</a>
+            <a href="{{ url_for('sign_out') }}" class="w3-bar-item w3-button">SIGN OUT</a>
+            {% endif %}
         </div>
         <!-- Hide right-floated links on small screens and replace them with a menu icon -->
 

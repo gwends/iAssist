@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+
+{% block page_content %}
+<div class="container">
+
+    <form method="POST" class="form mt-5">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.username.label }}
+            {{ form.username(class="form-control", placeholder="Enter Username") }}
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            {% if form.username.errors %}
+            {% for error in form.username.errors %}
+            <p class="text-danger">{{error}}</p>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.password.label }}
+            {{ form.password(class="form-control", placeholder="Password") }}
+            {% if form.password.errors %}
+            {% for error in form.password.errors %}
+            <p class="text-danger">{{error}}</p>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="form-group form-check">
+            {{ form.remember_me(class="form-check-label") }} {{ form.remember_me.label }}
+            <p>New User? <a href="{{ url_for('sign_up') }}">Click to Register!</a></p>
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+
+</div>
+{% endblock page_content %}

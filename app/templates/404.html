@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+
+{% block link %}
+{{super()}}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/404.css') }}">
+{% endblock link %}
+
+
+{% block page_content %}
+<div class="page-wrap d-flex flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 text-center">
+                <span class="display-1 d-block">404</span>
+                <div class="mb-4 lead">The page you are looking for was not found.</div>
+                <a href="https://www.totoprayogo.com/#" class="btn btn-link">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock page_content %}
