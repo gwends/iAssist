@@ -15,7 +15,7 @@
             <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt="" />
             <h3>Welcome</h3>
             <p>You are 30 seconds away from earning your own money!</p>
-            <a href="{{url_for('index')}}" class="btn btn-lg btn-primary">Home</a>
+            <a href="{{url_for('home')}}" class="btn btn-lg btn-primary">Home</a>
         </div>
         <div class="col-md-9 register-right">
             <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
@@ -36,49 +36,21 @@
                         <div class="row register-form">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    {{ eform.title(class="form-control", placeholder="Job Title*", autocorrect="off",
-                                    autocomplete="off") }}
-                                    {% if eform.title.errors %}
-                                    {% for error in eform.title.errors %}
-                                    <p class="text-danger">{{error}}</p>
-                                    {% endfor %}
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    {{ eform.address(class="form-control", placeholder="Address*", autocorrect="off",
-                                    autocomplete="off") }}
-                                    {% if eform.address.errors %}
-                                    {% for error in eform.address.errors %}
-                                    <p class="text-danger">{{error}}</p>
-                                    {% endfor %}
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    {{ eform.salary_price(class="form-control", placeholder="Salary/Wage*",
+                                    {{ eform.job_type(class="form-control", placeholder="Job Type*",
                                     autocorrect="off",
                                     autocomplete="off") }}
-                                    {% if eform.salary_price.errors %}
-                                    {% for error in eform.salary_price.errors %}
+                                    {% if eform.job_type.errors %}
+                                    {% for error in eform.job_type.errors %}
                                     <p class="text-danger">{{error}}</p>
                                     {% endfor %}
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    {{ eform.salary_category(class="form-control",
+                                    {{ eform.contact(class="form-control", placeholder="Contact Number/Email*",
                                     autocorrect="off",
                                     autocomplete="off") }}
-                                    {% if eform.salary_category.errors %}
-                                    {% for error in eform.salary_category.errors %}
-                                    <p class="text-danger">{{error}}</p>
-                                    {% endfor %}
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    {{ eform.contact_details(class="form-control",
-                                    autocorrect="off",
-                                    autocomplete="off", placeholder="Contact Number*") }}
-                                    {% if eform.contact_details.errors %}
-                                    {% for error in eform.contact_details.errors %}
+                                    {% if eform.contact.errors %}
+                                    {% for error in eform.contact.errors %}
                                     <p class="text-danger">{{error}}</p>
                                     {% endfor %}
                                     {% endif %}
@@ -86,7 +58,8 @@
                                 <div class="form-group mb-4">
                                     {{ eform.description(class="form-control",
                                     autocorrect="off",
-                                    autocomplete="off", placeholder="Job Description*", rows="9", style="resize:
+                                    autocomplete="off", placeholder="Skill / Personal Description", rows="9",
+                                    style="resize:
                                     none;") }}
                                     {% if eform.description.errors %}
                                     {% for error in eform.description.errors %}
@@ -106,65 +79,65 @@
                         <div class="row register-form">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    {{ eform.title(class="form-control", placeholder="Job Title*", autocorrect="off",
+                                    {{ hform.title(class="form-control", placeholder="Job Title*", autocorrect="off",
                                     autocomplete="off") }}
-                                    {% if eform.title.errors %}
-                                    {% for error in eform.title.errors %}
+                                    {% if hform.title.errors %}
+                                    {% for error in hform.title.errors %}
                                     <p class="text-danger">{{error}}</p>
                                     {% endfor %}
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    {{ eform.address(class="form-control", placeholder="Address*", autocorrect="off",
+                                    {{ hform.address(class="form-control", placeholder="Address*", autocorrect="off",
                                     autocomplete="off") }}
-                                    {% if eform.address.errors %}
-                                    {% for error in eform.address.errors %}
+                                    {% if hform.address.errors %}
+                                    {% for error in hform.address.errors %}
                                     <p class="text-danger">{{error}}</p>
                                     {% endfor %}
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    {{ eform.salary_price(class="form-control", placeholder="Salary/Wage*",
+                                    {{ hform.salary_price(class="form-control", placeholder="Salary/Wage*",
                                     autocorrect="off",
                                     autocomplete="off") }}
-                                    {% if eform.salary_price.errors %}
-                                    {% for error in eform.salary_price.errors %}
+                                    {% if hform.salary_price.errors %}
+                                    {% for error in hform.salary_price.errors %}
                                     <p class="text-danger">{{error}}</p>
                                     {% endfor %}
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    {{ eform.salary_category(class="form-control",
+                                    {{ hform.salary_category(class="form-control",
                                     autocorrect="off",
                                     autocomplete="off") }}
-                                    {% if eform.salary_category.errors %}
-                                    {% for error in eform.salary_category.errors %}
+                                    {% if hform.salary_category.errors %}
+                                    {% for error in hform.salary_category.errors %}
                                     <p class="text-danger">{{error}}</p>
                                     {% endfor %}
                                     {% endif %}
                                 </div>
                                 <div class="form-group">
-                                    {{ eform.contact_details(class="form-control",
+                                    {{ hform.contact_details(class="form-control",
                                     autocorrect="off",
                                     autocomplete="off", placeholder="Contact Number*") }}
-                                    {% if eform.contact_details.errors %}
-                                    {% for error in eform.contact_details.errors %}
+                                    {% if hform.contact_details.errors %}
+                                    {% for error in hform.contact_details.errors %}
                                     <p class="text-danger">{{error}}</p>
                                     {% endfor %}
                                     {% endif %}
                                 </div>
                                 <div class="form-group mb-4">
-                                    {{ eform.description(class="form-control",
+                                    {{ hform.description(class="form-control",
                                     autocorrect="off",
                                     autocomplete="off", placeholder="Job Description*", rows="9", style="resize:
                                     none;") }}
-                                    {% if eform.description.errors %}
-                                    {% for error in eform.description.errors %}
+                                    {% if hform.description.errors %}
+                                    {% for error in hform.description.errors %}
                                     <p class="text-danger">{{error}}</p>
                                     {% endfor %}
                                     {% endif %}
                                 </div>
-                                {{ eform.submit(class='btnRegister', value="Post")}}
+                                {{ hform.submit(class='btnRegister', value="Post")}}
                             </div>
                         </div>
                     </form>

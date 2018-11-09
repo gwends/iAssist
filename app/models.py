@@ -11,20 +11,27 @@ def load_user(id):
 
 
 class User(db.Model, UserMixin):
+    __tablename__ = 'Users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True,
                          unique=True)
-    email = db.Column(db.String(120))
+    email = db.Column(db.String(120), unique=True)
     password_hash = db.Column(db.String(128))
     contact_number = db.Column(db.String(20))
     address = db.Column(db.String(100))
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50))
     gender = db.Column(db.String(2))
+    edu_background = db.Column(db.String(50))
     job_posts = db.relationship('Job_Post', backref='author', lazy='dynamic')
     job_offers = db.relationship('Job_Offer', backref='author', lazy='dynamic')
 
-    def set_password(self, password):
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
@@ -35,6 +42,7 @@ class User(db.Model, UserMixin):
 
 
 class Job_Post(db.Model):
+    __tablename__ = 'JobPosts'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     address = db.Column(db.String(50))
@@ -43,18 +51,20 @@ class Job_Post(db.Model):
     contact_details = db.Column(db.String(20))
     description = db.Column(db.String(200))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('Users.id'))
 
     def __repr__(self):
         return 'Job Post {}'.format(self.title)
 
 
 class Job_Offer(db.Model):
+    __tablename__ = 'JobOffers'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100))
+    job_type = db.Column(db.String(100))
+    contact = db.Column(db.String(50))
     description = db.Column(db.String(200))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('Users.id'))
 
     def __repr__(self):
         return 'Job Offer {}'.format(self.title)

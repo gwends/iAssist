@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+
+{% block link %}
+{{super()}}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock link %}
+
+
+{% block page_content %}
+{% include 'layout/navbar.html' %}
+
+<div class="container mt-5">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button class="close" type="button" data-dismiss="alert">&times;</button>
+        <p class="text-danger">{{ message }}</p>
+    </div>
+    {% endfor %}
+</div>
+<div class="container emp-profile">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-img">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog"
+                        alt="" />
+                    <div class="file btn btn-lg btn-primary">
+                        Change Photo
+                        <input type="file" name="file" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-head">
+                    <h5>
+                        {{current_user.first_name}} {{current_user.last_name}}
+                    </h5>
+                    <h6>
+
+                        {% if current_user.edu_background %}
+                        {{current_user.edu_background}}
+                        {% endif %}
+
+                    </h6>
+
+                    <p class="proile-rating">
+                        <!--RANKINGS : <span>8/10</span>-->
+                    </p>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                                aria-controls="home" aria-selected="true">About</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <a href="{{url_for('edit_profile')}}" class="btn profile-edit-btn">Edit Profile</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-work">
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>User Id</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{current_user.username}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Name</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{current_user.last_name}}, {{current_user.first_name}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Gender</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+
+                                    {% if current_user.gender == 'M' %}
+                                    Male
+                                    {% else %}
+                                    Female
+                                    {% endif %}
+
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Email</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+
+                                    {% if current_user.email %}
+                                    {{current_user.email}}
+                                    {% else %}
+                                    N/A
+                                    {% endif %}
+
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Phone</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+
+                                    {% if current_user.contact_number %}
+                                    {{current_user.contact_number}}
+                                    {% else %}
+                                    N/A
+                                    {% endif %}
+
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Profession</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>
+
+                                    {% if current_user.edu_background %}
+                                    {{current_user.edu_background}}
+                                    {% else %}
+                                    N/A
+                                    {% endif %}
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock page_content %}

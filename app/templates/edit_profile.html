@@ -1,35 +1,26 @@
 {% extends 'base.html' %}
 
+
 {% block link %}
 {{super()}}
-<link rel="stylesheet" href="{{url_for('static', filename='css/sign_in.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='navbar.css')}}">
 {% endblock link %}
 
 
 {% block page_content %}
 {% include 'layout/navbar.html' %}
+
 <div class="container mt-5">
     <div class="row">
         <div class="col-1 col-sm-1"></div>
         <div class="col-10 col-sm-10">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="text-center">Registration</h3>
+                    <h3 class="text-center">Edit Profile</h3>
                 </div>
                 <div class="card-body">
                     <form method="POST" class="form mt-2">
                         {{ form.hidden_tag() }}
-                        <div class="form-group">
-                            <strong>
-                                {{ form.username.label }}
-                            </strong>
-                            {{ form.username(class="form-control", placeholder="Username") }}
-                            {% if form.username.errors %}
-                            {% for error in form.username.errors %}
-                            <p class="text-danger">{{error}}</p>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
                         <div class="form-group">
                             <strong>
                                 {{ form.firstname.label }}
@@ -54,28 +45,6 @@
                         </div>
                         <div class="form-group">
                             <strong>
-                                {{ form.password.label }}
-                            </strong>
-                            {{ form.password(class="form-control", placeholder="Password") }}
-                            {% if form.password.errors %}
-                            {% for error in form.password.errors %}
-                            <p class="text-danger">{{error}}</p>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <strong>
-                                {{ form.check_password.label }}
-                            </strong>
-                            {{ form.check_password(class="form-control", placeholder="Repeat Password") }}
-                            {% if form.check_password.errors %}
-                            {% for error in form.check_password.errors %}
-                            <p class="text-danger">{{error}}</p>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <strong>
                                 {{ form.contact_no.label }}
                             </strong>
                             {{ form.contact_no(class="form-control", placeholder="Contact Number") }}
@@ -87,11 +56,11 @@
                         </div>
                         <div class="form-group">
                             <strong>
-                                {{ form.email.label }}
+                                {{ form.edu_background.label }}
                             </strong>
-                            {{ form.email(class="form-control", placeholder="Email") }}
-                            {% if form.email.errors %}
-                            {% for error in form.email.errors %}
+                            {{ form.edu_background(class="form-control", placeholder="Educational Background") }}
+                            {% if form.edu_background.errors %}
+                            {% for error in form.edu_background.errors %}
                             <p class="text-danger">{{error}}</p>
                             {% endfor %}
                             {% endif %}

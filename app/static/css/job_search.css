@@ -12,3 +12,7 @@ html, body {
     outline: none;
     box-shadow: none;
 }
+
+#category {
+    border: none;
+}

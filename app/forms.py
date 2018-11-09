@@ -6,40 +6,18 @@ from app.models import User
 
 
 class EmployeeJobPostForm(FlaskForm):
-    title = StringField(
+    job_type = StringField(
         'Job Title*',
         validators=[
             DataRequired(),
             Length(min=2, max=20),
         ]
     )
-    address = StringField(
+    contact = StringField(
         'Location',
         validators=[
             DataRequired(),
             Length(min=3, max=20)
-        ]
-    )
-    salary_price = StringField(
-        'Salary',
-        validators=[
-
-        ]
-    )
-    salary_category = SelectField(
-        choices=[
-            ('None', 'Salary Type'),
-            ('D', 'Per Day'),
-            ('H', 'Per Hour')
-        ],
-        validators=[
-            AnyOf(('H', 'D'))
-        ]
-    )
-    contact_details = StringField(
-        'Contact Number*',
-        validators=[
-
         ]
     )
     description = TextAreaField(
@@ -88,6 +66,12 @@ class HirerJobPostForm(FlaskForm):
             Length(max=200)
         ]
     )
+    contact_details = StringField(
+        'Contact Number',
+        validators=[
+
+        ]
+    )
     submit = SubmitField('Post Job')
 
 
@@ -96,6 +80,12 @@ class SearchForm(FlaskForm):
         '',
         validators=[
             DataRequired()
+        ]
+    )
+    category = SelectField(
+        choices=[
+            ('Post', 'Employee'),
+            ('Offer', 'Employer')
         ]
     )
     submit = SubmitField(
@@ -134,13 +124,15 @@ class RegistrationForm(FlaskForm):
     firstname = StringField(
         'First Name',
         validators=[
-            DataRequired()
+            DataRequired(),
+            Regexp('^[A-Za-z ]{2,30}$', message="Enter a valid First name.")
         ]
     )
     lastname = StringField(
         'Last Name',
         validators=[
-            DataRequired()
+            DataRequired(),
+            Regexp('^[A-Za-z ]{2,30}$', message="Enter a valid Last name.")
         ]
     )
     gender = RadioField(
@@ -155,6 +147,12 @@ class RegistrationForm(FlaskForm):
         validators=[
             DataRequired(),
             Email()
+        ]
+    )
+    contact_no = StringField(
+        'Contact No.',
+        validators=[
+            DataRequired(),
         ]
     )
     password = PasswordField(
@@ -179,3 +177,43 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError(
                 'Username already Exists! Please use a different one')
+
+    def validate_email(self, email):
+        if User.query.filter_by(email=email.data).first():
+            raise ValidationError(
+                'Email already in use! Please use a different one')
+
+
+class EditProfile(FlaskForm):
+    firstname = StringField(
+        'First Name',
+        validators=[
+            DataRequired(),
+            Regexp('^[A-Za-z ]{2,30}$', message="Enter a valid First name.")
+        ]
+    )
+    lastname = StringField(
+        'Last Name',
+        validators=[
+            DataRequired(),
+            Regexp('^[A-Za-z ]{2,30}$', message="Enter a valid Last name.")
+        ]
+    )
+    gender = RadioField(
+        'Gender',
+        choices=[
+            ('M', 'Male'),
+            ('F', 'Female')
+        ]
+    )
+    contact_no = StringField(
+        'Contact No.',
+        validators=[
+        ]
+    )
+    edu_background = StringField(
+        'Educational Background',
+    )
+    submit = SubmitField(
+        'Edit'
+    )

@@ -5,24 +5,11 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/job_search.css') }}">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
     crossorigin="anonymous">
+<link rel="stylesheet" href="{{url_for('static', filename='css/navbar.css')}}">
 {% endblock link %}
 
 {% block page_content %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <a class="navbar-brand" href="#">iAssist</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
-        aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-            <a class="nav-item nav-link" href="{{url_for('index')}}">Home <span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="#">Profile</a>
-            <a class="nav-item nav-link" href="{{ url_for('job_apply') }}">Job Post</a>
-            <a class="nav-item nav-link" href="{{url_for('sign_out')}}">Sign Out</a>
-        </div>
-    </div>
-</nav>
+{% include 'layout/navbar.html' %}
 
 <div class="container">
     <br>
@@ -42,6 +29,7 @@
                     </div>
                     <!--end of col-->
                     <div class="col-auto">
+                        {{sform.category( id='category')}}
                         {{ sform.submit(class="btn btn-success") }}
                     </div>
                     <!--end of col-->
@@ -51,19 +39,34 @@
         <!--end of col-->
     </div>
     <br>
+    <br>
 
+    {% if sform.category.data == 'Offer' %}
     {% for job in jobs %}
 
     <div class="card mb-5">
         <div class="card-body">
-            <h5 class="card-title">{{ job.title }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">{{job.author}}</h6>
+            <h5 class="card-title">Job Title: {{ job.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Author: {{job.author}}</h6>
             <p class="card-text">{{ job.description | truncate(40) | safe }}</p>
-            <a href="#" class="card-link">Card link</a>
-            <a href="#" class="card-link">Another link</a>
         </div>
     </div>
 
     {% endfor %}
+    {% else %}
+    {% for job in jobs %}
+
+    <div class="card mb-5">
+        <div class="card-body">
+            <h5 class="card-title">{{ job.job_type }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Author: {{job.author}}</h6>
+            <p class="card-text">{{ job.description | truncate(40) | safe }}</p>
+        </div>
+    </div>
+
+    {% endfor %}
+    {% endif %}
+
+
 </div>
 {% endblock page_content %}

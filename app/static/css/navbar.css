@@ -1,0 +1,12 @@
+
+a.nav-item {
+    font-weight: bold;
+}
+
+a.nav-item:hover {
+    color: rgb(10, 35, 104) !important;
+}
+
+nav {
+    background-color: #FFF;
+}

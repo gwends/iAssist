@@ -1,35 +1,64 @@
 {% extends 'base.html' %}
 
 
-{% block page_content %}
-<div class="container">
+{% block link %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sign_in.css') }}">
+{% endblock link %}
 
-    <form method="POST" class="form mt-5">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.username.label }}
-            {{ form.username(class="form-control", placeholder="Enter Username") }}
-            {% if form.username.errors %}
-            {% for error in form.username.errors %}
-            <p class="text-danger">{{error}}</p>
-            {% endfor %}
-            {% endif %}
+
+{% block page_content %}
+{% include 'layout/navbar.html' %}
+<div class="container mt-5">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button class="close" type="button" data-dismiss="alert">&times;</button>
+        <p class="text-danger">{{ message }}</p>
+    </div>
+    {% endfor %}
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="text-center">Login</h3>
+                    <form method="POST" class="form mt-5">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            <strong>
+                                {{ form.username.label() }}
+                            </strong>
+                            {{ form.username(class="form-control", placeholder="Enter Username") }}
+                            {% if form.username.errors %}
+                            {% for error in form.username.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                {{ form.password.label }}
+                            </strong>
+                            {{ form.password(class="form-control", placeholder="Password") }}
+                            {% if form.password.errors %}
+                            {% for error in form.password.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group form-check">
+                            {{ form.remember_me(class="form-check-label") }} {{ form.remember_me.label }}
+                            <p>New User? <a href="{{ url_for('sign_up') }}">Click to Register!</a></p>
+                        </div>
+                        {{ form.submit(class="btn btn-primary form-control") }}
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            {{ form.password.label }}
-            {{ form.password(class="form-control", placeholder="Password") }}
-            {% if form.password.errors %}
-            {% for error in form.password.errors %}
-            <p class="text-danger">{{error}}</p>
-            {% endfor %}
-            {% endif %}
-        </div>
-        <div class="form-group form-check">
-            {{ form.remember_me(class="form-check-label") }} {{ form.remember_me.label }}
-            <p>New User? <a href="{{ url_for('sign_up') }}">Click to Register!</a></p>
-        </div>
-        {{ form.submit(class="btn btn-primary") }}
-    </form>
+        <div class="col-3"></div>
+    </div>
 
 </div>
 {% endblock page_content %}
