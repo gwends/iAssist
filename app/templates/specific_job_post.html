@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+
+{% block page_content %}
+{% include 'layout/navbar.html' %}
+<div class="container">
+    <div class="card mt-5">
+        <div class="card-body">
+            <h4>{{job_post.title}}</h4>
+            <h5 class="text-muted" style="font-size: 12px;">{{job_post.timestamp}}</h5>
+            <p>by {{job_post.author}}</p>
+            <h5>Job Description</h5>
+            <p style="text-indent: 2.5em">{{job_post.description}}</p>
+            {% if job_post.address %}
+            <h5>Job Location</h5>
+            <p>{{job_post.address}}</p>
+            {% endif %}
+
+            {% if job_post.salary_price %}
+            <h5>Job Salary Details</h5>
+            <p>
+                {% if job_post.salary_category == 'D' %}
+                Per Day
+                {% else %}
+                Per Hour
+                {% endif %}
+                : {{job_post.salary_price}}</p>
+            {% endif %}
+
+
+            {% if job_post.contact_details %}
+            <h5>Contact Details</h5>
+            <p>{{ job_post.contact_details }}</p>
+            {% endif %}
+            <button class="btn btn-default btn-sm">Apply</button>
+        </div>
+    </div>
+</div>
+{% endblock page_content %}

@@ -36,7 +36,7 @@ def job_post():
         post.author = current_user
         db.session.add(post)
         db.session.commit()
-        flash('Successfully Posted the job.')
+        flash('Successfully Posted the job.', category='success')
         return redirect(url_for('home'))
     if hForm.validate_on_submit():
         post = Job_Post()
@@ -48,7 +48,7 @@ def job_post():
         post.author = current_user
         db.session.add(post)
         db.session.commit()
-        flash('Successfully Posted the job.')
+        flash('Successfully Posted the job.', category='success')
         return redirect(url_for('home'))
     return render_template('job_post.html', title="Job Post", eform=eForm, hform=hForm)
 
@@ -76,8 +76,9 @@ def sign_in():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid Username or Password')
+            flash('Invalid Username or Password', category='danger')
             return redirect(url_for('sign_in'))
+        flash('Successfully Logged in.', category='success')
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
@@ -89,7 +90,8 @@ def sign_in():
 @app.route('/sign_out')
 def sign_out():
     logout_user()
-    return redirect(url_for('index'))
+    flash('Signed Out!', category='success')
+    return redirect(url_for('sign_in'))
 
 
 @app.route('/sign_up', methods=['GET', 'POST'])
@@ -108,7 +110,7 @@ def sign_up():
         user.password = form.password.data
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
+        flash('Congratulations, you are now a registered user!', category='success')
         return redirect(url_for('sign_in'))
     return render_template('sign_up.html', title='Sign Up', form=form)
 
@@ -116,7 +118,7 @@ def sign_up():
 @app.route('/home')
 @login_required
 def home():
-    return render_template('home.html')
+    return render_template('home.html', title='Profile')
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -132,7 +134,7 @@ def edit_profile():
         user.edu_background = form.edu_background.data
         db.session.add(user)
         db.session.commit()
-        flash('Successfully Edited Profile.')
+        flash('Successfully Edited Profile.', category='success')
         return redirect(url_for('home'))
     else:
         form.firstname.data = user.first_name
@@ -140,4 +142,22 @@ def edit_profile():
         form.gender.data = user.gender
         form.contact_no.data = user.contact_number
         form.edu_background.data = user.edu_background
-        return render_template('edit_profile.html', form=form)
+        return render_template('edit_profile.html', title='Edit Profile', form=form)
+
+
+@app.route('/job_post/<id>', methods=['GET', 'POST'])
+def specific_job_post(id):
+    job_post = Job_Post.query.filter_by(id=id).first()
+    if request.method == 'POST':
+        return redirect('home')
+    else:
+        return render_template('specific_job_post.html', job_post=job_post, title='Job Post')
+
+
+@app.route('/job_offer/<id>', methods=['GET', 'POST'])
+def specific_job_offer(id):
+    job_offer = Job_Offer.query.filter_by(id=id).first()
+    if request.method == 'POST':
+        return redirect('home')
+    else:
+        return render_template('specific_job_offer.html', job_offer=job_offer, title='Job Offer')

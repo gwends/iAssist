@@ -6,10 +6,17 @@
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
         <div class="navbar-nav">
+            {% if current_user.is_authenticated %}
             <a class="nav-item nav-link" href="{{url_for('home')}}">HOME</span></a>
             <a class="nav-item nav-link" href="{{url_for('job_search')}}">JOB SEARCH</a>
             <a class="nav-item nav-link" href="{{url_for('job_post')}}">JOB APPLY</a>
             <a class="nav-item nav-link" href="{{url_for('sign_out')}}">SIGN OUT</a>
+            {% else %}
+            <a href="{{url_for('index')}}" class="nav-item nav-link">HOME</a>
+            <a href="{{url_for('sign_in')}}" class="nav-item nav-link">SIGN IN</a>
+            <a href="{{url_for('sign_up')}}" class="nav-item nav-link">SIGN UP</a>
+            {% endif %}
+
         </div>
     </div>
 </nav>

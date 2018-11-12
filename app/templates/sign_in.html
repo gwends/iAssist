@@ -10,12 +10,17 @@
 {% block page_content %}
 {% include 'layout/navbar.html' %}
 <div class="container mt-5">
-    {% for message in get_flashed_messages() %}
-    <div class="alert alert-warning">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-primary alert-{{category}}">
         <button class="close" type="button" data-dismiss="alert">&times;</button>
-        <p class="text-danger">{{ message }}</p>
+        {{message}}
     </div>
     {% endfor %}
+    {% endif %}
+    {% endwith %}
+
 </div>
 <div class="container">
     <div class="row">
