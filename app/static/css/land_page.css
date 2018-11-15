@@ -3,8 +3,18 @@ body, html {
     height: 100%;
     line-height: 1.8;
 }
+
+#nav {
+    opacity: 0.9 !important;
+}
+
+#nav a:hover {
+    text-decoration: none !important;
+    font-weight: bolder;
+}
 /* Full height image header */
 .bgimg-1 {
+    background-image: url(../img/3.jpg);
     background-position: center;
     background-size: cover;
     background-color: lightblue;

@@ -23,7 +23,8 @@
                             <strong>
                                 {{ form.username.label }}
                             </strong>
-                            {{ form.username(class="form-control", placeholder="Username") }}
+                            {{ form.username(class="form-control", placeholder="Username", autocorrect='off',
+                            autocomplete='off') }}
                             {% if form.username.errors %}
                             {% for error in form.username.errors %}
                             <p class="text-danger">{{error}}</p>

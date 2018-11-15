@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, SubmitField, SelectField, TextAreaField, RadioField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, Regexp, ValidationError, AnyOf, Length, Email, EqualTo
 
@@ -214,6 +215,8 @@ class EditProfile(FlaskForm):
     edu_background = StringField(
         'Educational Background',
     )
+    picture = FileField('Update Profile Picture', validators=[
+                        FileAllowed(['jpg', 'png'])])
     submit = SubmitField(
         'Edit'
     )

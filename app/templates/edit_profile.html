@@ -19,7 +19,7 @@
                     <h3 class="text-center">Edit Profile</h3>
                 </div>
                 <div class="card-body">
-                    <form method="POST" class="form mt-2">
+                    <form method="POST" class="form mt-2" enctype="multipart/form-data">
                         {{ form.hidden_tag() }}
                         <div class="form-group">
                             <strong>
@@ -53,6 +53,17 @@
                             <p class="text-danger">{{error}}</p>
                             {% endfor %}
                             {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                {{form.picture.label()}}
+                                {{form.picture(class='form-control-file')}}
+                                {% if form.picture.errors %}
+                                {% for error in form.picture.errors %}
+                                <p class="text-danger">{{error}}</p>
+                                {% endfor %}
+                                {% endif %}
+                            </strong>
                         </div>
                         <div class="form-group">
                             <strong>
