@@ -23,7 +23,8 @@ class User(db.Model, UserMixin):
     last_name = db.Column(db.String(50))
     gender = db.Column(db.String(2))
     edu_background = db.Column(db.String(50))
-    image_file = db.Column(db.String(120), nullable=False, default='default.png')
+    image_file = db.Column(
+        db.String(120), nullable=False, default='default.png')
     job_posts = db.relationship('Job_Post', backref='author', lazy='dynamic')
     job_offers = db.relationship('Job_Offer', backref='author', lazy='dynamic')
 

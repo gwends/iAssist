@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
     {% if current_user.is_authenticated %}
-    <a class="navbar-brand" href="{{url_for('home')}}">iAssist</a>
+    <a class="navbar-brand" href="{{url_for('users.home')}}">iAssist</a>
     {% else %}
-    <a href="{{url_for('index')}}" class="navbar-brand">iAssist</a>
+    <a href="{{url_for('main.index')}}" class="navbar-brand">iAssist</a>
     {% endif %}
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
         aria-expanded="false" aria-label="Toggle navigation">
@@ -12,14 +12,14 @@
     <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
         <div class="navbar-nav">
             {% if current_user.is_authenticated %}
-            <a class="nav-item nav-link" href="{{url_for('home')}}">HOME</span></a>
-            <a class="nav-item nav-link" href="{{url_for('job_search')}}">JOB SEARCH</a>
-            <a class="nav-item nav-link" href="{{url_for('job_post')}}">JOB POST</a>
-            <a class="nav-item nav-link" href="{{url_for('sign_out')}}">SIGN OUT</a>
+            <a class="nav-item nav-link" href="{{url_for('users.home')}}">HOME</span></a>
+            <a class="nav-item nav-link" href="{{url_for('jobs.job_search')}}">JOB SEARCH</a>
+            <a class="nav-item nav-link" href="{{url_for('jobs.job_post')}}">JOB POST</a>
+            <a class="nav-item nav-link" href="{{url_for('users.sign_out')}}">SIGN OUT</a>
             {% else %}
-            <a href="{{url_for('index')}}" class="nav-item nav-link">HOME</a>
-            <a href="{{url_for('sign_in')}}" class="nav-item nav-link">SIGN IN</a>
-            <a href="{{url_for('sign_up')}}" class="nav-item nav-link">SIGN UP</a>
+            <a href="{{url_for('main.index')}}" class="nav-item nav-link">HOME</a>
+            <a href="{{url_for('users.sign_in')}}" class="nav-item nav-link">SIGN IN</a>
+            <a href="{{url_for('users.sign_up')}}" class="nav-item nav-link">SIGN UP</a>
             {% endif %}
 
         </div>

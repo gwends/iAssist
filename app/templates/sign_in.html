@@ -55,7 +55,7 @@
                         </div>
                         <div class="form-group form-check">
                             {{ form.remember_me(class="form-check-label") }} {{ form.remember_me.label }}
-                            <p class="text-muted" style="font-size:12px;">New User? <a href="{{ url_for('sign_up') }}">Click
+                            <p class="text-muted" style="font-size:12px;">New User? <a href="{{ url_for('users.sign_up') }}">Click
                                     to Register!</a></p>
                         </div>
                         {{ form.submit(class="btn btn-primary form-control") }}

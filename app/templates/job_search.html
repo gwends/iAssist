@@ -44,7 +44,7 @@
     {% for job in jobs %}
 
     <div class="card mb-5">
-        <a href="{{url_for('specific_job_offer', id=job.id)}}">
+        <a href="{{url_for('jobs.specific_job_offer', id=job.id)}}">
             <div class="card-body">
                 <h5 class="card-title">Job Title: {{ job.title }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Author: {{job.author}}</h6>
@@ -58,7 +58,7 @@
     {% for job in jobs %}
 
     <div class="card mb-5">
-        <a href="{{url_for('specific_job_post', id=job.id)}}">
+        <a href="{{url_for('jobs.specific_job_post', id=job.id)}}">
             <div class="card-body">
                 <h5 class="card-title">{{ job.job_type }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Author: {{job.author}}</h6>
