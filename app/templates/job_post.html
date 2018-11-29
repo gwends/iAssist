@@ -10,142 +10,33 @@
 {% block page_content %}
 {% include 'layout/navbar.html' %}
 
-<div class="register">
+<div class="container mt-5">
     <div class="row">
-        <div class="col-md-3 register-left mb-5">
-            <h3 class="mt-5">Welcome</h3>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Hic culpa quia deserunt labore repellendus
-                enim tenetur neque nesciunt asperiores dolore accusantium velit laudantium laboriosam consectetur
-                maxime, laborum alias sequi iusto.</p>
-        </div>
-        <div class="col-md-9 register-right">
-            <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
-                <li class="nav-item ml-4">
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-                        aria-selected="true">Employee</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
-                        aria-selected="false"> Hirer</a>
-                </li>
-            </ul>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <h3 class="register-heading">Job Post as a Employee</h3>
-                    <form action="" method="POST">
-                        {{ eform.hidden_tag() }}
-                        <div class="row register-form">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    {{ eform.job_type(class="form-control", placeholder="Job Type*",
-                                    autocorrect="off",
-                                    autocomplete="off") }}
-                                    {% if eform.job_type.errors %}
-                                    {% for error in eform.job_type.errors %}
-                                    <p class="text-danger">{{error}}</p>
-                                    {% endfor %}
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    {{ eform.contact(class="form-control", placeholder="Contact Number/Email*",
-                                    autocorrect="off",
-                                    autocomplete="off") }}
-                                    {% if eform.contact.errors %}
-                                    {% for error in eform.contact.errors %}
-                                    <p class="text-danger">{{error}}</p>
-                                    {% endfor %}
-                                    {% endif %}
-                                </div>
-                                <div class="form-group mb-4">
-                                    {{ eform.description(class="form-control",
-                                    autocorrect="off",
-                                    autocomplete="off", placeholder="Skill / Personal Description", rows="9",
-                                    style="resize:
-                                    none;") }}
-                                    {% if eform.description.errors %}
-                                    {% for error in eform.description.errors %}
-                                    <p class="text-danger">{{error}}</p>
-                                    {% endfor %}
-                                    {% endif %}
-                                </div>
-                                {{ eform.submit(class='btnRegister', value="Post")}}
-                            </div>
-                        </div>
-                    </form>
+        <div class="col-1 col-sm-1"></div>
+        <div class="col-10 col-sm-10">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Edit Profile</h3>
                 </div>
-                <div class="tab-pane fade show" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                    <h3 class="register-heading">Job Post as a Hirer</h3>
-                    <form action="" method="POST">
-                        {{ eform.hidden_tag() }}
-                        <div class="row register-form">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    {{ hform.title(class="form-control", placeholder="Job Title*", autocorrect="off",
-                                    autocomplete="off") }}
-                                    {% if hform.title.errors %}
-                                    {% for error in hform.title.errors %}
-                                    <p class="text-danger">{{error}}</p>
-                                    {% endfor %}
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    {{ hform.address(class="form-control", placeholder="Address*", autocorrect="off",
-                                    autocomplete="off") }}
-                                    {% if hform.address.errors %}
-                                    {% for error in hform.address.errors %}
-                                    <p class="text-danger">{{error}}</p>
-                                    {% endfor %}
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    {{ hform.salary_price(class="form-control", placeholder="Salary/Wage*",
-                                    autocorrect="off",
-                                    autocomplete="off") }}
-                                    {% if hform.salary_price.errors %}
-                                    {% for error in hform.salary_price.errors %}
-                                    <p class="text-danger">{{error}}</p>
-                                    {% endfor %}
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    {{ hform.salary_category(class="form-control",
-                                    autocorrect="off",
-                                    autocomplete="off") }}
-                                    {% if hform.salary_category.errors %}
-                                    {% for error in hform.salary_category.errors %}
-                                    <p class="text-danger">{{error}}</p>
-                                    {% endfor %}
-                                    {% endif %}
-                                </div>
-                                <div class="form-group">
-                                    {{ hform.contact_details(class="form-control",
-                                    autocorrect="off",
-                                    autocomplete="off", placeholder="Contact Number*") }}
-                                    {% if hform.contact_details.errors %}
-                                    {% for error in hform.contact_details.errors %}
-                                    <p class="text-danger">{{error}}</p>
-                                    {% endfor %}
-                                    {% endif %}
-                                </div>
-                                <div class="form-group mb-4">
-                                    {{ hform.description(class="form-control",
-                                    autocorrect="off",
-                                    autocomplete="off", placeholder="Job Description*", rows="9", style="resize:
-                                    none;") }}
-                                    {% if hform.description.errors %}
-                                    {% for error in hform.description.errors %}
-                                    <p class="text-danger">{{error}}</p>
-                                    {% endfor %}
-                                    {% endif %}
-                                </div>
-                                {{ hform.submit(class='btnRegister', value="Post")}}
-                            </div>
+                <div class="card-body">
+                    <form method="POST" class="form mt-2" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            <label for="first-name">First Name</label>
+                            <input type="text" name="first-name" class="form-control">
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+        <div class="col-1 col-sm-1"></div>
     </div>
 
 </div>
 {% endblock page_content %}
+
+
+{% block script %}
+{{ super() }}
+<script src="{{url_for('static',filename='js/job_post.js')}}"></script>
+{% endblock script %}

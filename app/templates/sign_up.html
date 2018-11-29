@@ -33,28 +33,6 @@
                         </div>
                         <div class="form-group">
                             <strong>
-                                {{ form.firstname.label }}
-                            </strong>
-                            {{ form.firstname(class="form-control", placeholder="Firstname") }}
-                            {% if form.firstname.errors %}
-                            {% for error in form.firstname.errors %}
-                            <p class="text-danger">{{error}}</p>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <strong>
-                                {{ form.lastname.label }}
-                            </strong>
-                            {{ form.lastname(class="form-control", placeholder="Lastname") }}
-                            {% if form.lastname.errors %}
-                            {% for error in form.lastname.errors %}
-                            <p class="text-danger">{{error}}</p>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <strong>
                                 {{ form.password.label }}
                             </strong>
                             {{ form.password(class="form-control", placeholder="Password") }}
@@ -77,17 +55,6 @@
                         </div>
                         <div class="form-group">
                             <strong>
-                                {{ form.contact_no.label }}
-                            </strong>
-                            {{ form.contact_no(class="form-control", placeholder="Contact Number") }}
-                            {% if form.contact_no.errors %}
-                            {% for error in form.contact_no.errors %}
-                            <p class="text-danger">{{error}}</p>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <strong>
                                 {{ form.email.label }}
                             </strong>
                             {{ form.email(class="form-control", placeholder="Email") }}
@@ -96,16 +63,6 @@
                             <p class="text-danger">{{error}}</p>
                             {% endfor %}
                             {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <strong>
-                                {{ form.gender.label(class="mb-2") }}
-                            </strong>
-                            <br>
-                            {% for subfield in form.gender %}
-                            {{ subfield(class="mr-1") }}{{ subfield.label(class="radio-inline mr-5") }}
-                            {% endfor %}
-
                         </div>
                         {{ form.submit(class="btn btn-primary form-control") }}
                     </form>

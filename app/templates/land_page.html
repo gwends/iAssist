@@ -17,7 +17,13 @@
 <!-- Navbar (sit on top) -->
 <div class="w3-top" id="nav">
     <div class="w3-bar w3-white w3-card" id="myNavbar">
+
+        {% if current_user.is_authenticated %}
+        <a href="{{url_for('users.home')}}" class="w3-bar-item w3-button w3-wide">iAssist</a>
+        {% else %}
         <a href="#home" class="w3-bar-item w3-button w3-wide">iAssist</a>
+        {% endif %}
+
         <!-- Right-sided navbar links -->
         <div class="w3-right w3-hide-small">
             <a href="#home" class="w3-bar-item w3-button">HOME</a>

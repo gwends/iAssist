@@ -30,6 +30,7 @@
             <div class="col-md-4">
                 <div class="profile-img">
                     <img class="img-thumbnail" src="{{image_file}}" alt="" />
+                    <input type="file">
                 </div>
             </div>
             <div class="col-md-6">
@@ -123,8 +124,8 @@
                             <div class="col-md-6">
                                 <p>
 
-                                    {% if current_user.contact_number %}
-                                    {{current_user.contact_number}}
+                                    {% if current_user.contact %}
+                                    {{current_user.contact}}
                                     {% else %}
                                     N/A
                                     {% endif %}
@@ -134,13 +135,13 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <label>Profession</label>
+                                <label>Age</label>
                             </div>
                             <div class="col-md-6">
                                 <p>
 
-                                    {% if current_user.edu_background %}
-                                    {{current_user.edu_background}}
+                                    {% if age %}
+                                    {{age}}
                                     {% else %}
                                     N/A
                                     {% endif %}

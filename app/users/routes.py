@@ -4,7 +4,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from app.users.forms import LoginForm, RegistrationForm, EditProfile
-from app.models import User, Job_Post, Job_Offer
+from app.models import User, Job, Works
 
 
 users = Blueprint('users', __name__)
@@ -18,10 +18,6 @@ def sign_up():
     if form.validate_on_submit():
         user = User()
         user.username = form.username.data
-        user.first_name = form.firstname.data
-        user.contact_number = form.contact_no.data
-        user.last_name = form.lastname.data
-        user.gender = form.gender.data
         user.email = form.email.data
         user.password = form.password.data
         db.session.add(user)
@@ -64,10 +60,10 @@ def edit_profile():
             picture_file = save_picture(form.picture.data)
             current_user.image_file = picture_file
         current_user.first_name = form.firstname.data
-        current_user.contact_number = form.contact_no.data
+        current_user.contact = form.contact_no.data
         current_user.last_name = form.lastname.data
         current_user.gender = form.gender.data
-        current_user.edu_background = form.edu_background.data
+        current_user.birthDate = form.birthDate.data
         db.session.commit()
         flash('Successfully Edited Profile.', category='success')
         return redirect(url_for('users.home'))
@@ -75,8 +71,8 @@ def edit_profile():
         form.firstname.data = current_user.first_name
         form.lastname.data = current_user.last_name
         form.gender.data = current_user.gender
-        form.contact_no.data = current_user.contact_number
-        form.edu_background.data = current_user.edu_background
+        form.contact_no.data = current_user.contact
+        form.birthDate.data = current_user.birthDate
         image_file = url_for(
             'static', filename='profile_pics/' + current_user.image_file)
         return render_template('edit_profile.html', title='Edit Profile', form=form, image_file=image_file)
@@ -85,6 +81,7 @@ def edit_profile():
 @users.route('/home')
 @login_required
 def home():
+    current_age = current_user.get_age()
     image_file = url_for(
         'static', filename='profile_pics/' + current_user.image_file)
-    return render_template('home.html', title='Profile', image_file=image_file)
+    return render_template('home.html', title='Profile', image_file=image_file, age=current_age)

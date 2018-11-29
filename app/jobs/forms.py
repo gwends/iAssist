@@ -1,8 +1,17 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, TextAreaField, RadioField, PasswordField, BooleanField
+from wtforms import StringField, SubmitField, IntegerField, SelectField, TextAreaField, RadioField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, Regexp, ValidationError, AnyOf, Length, Email, EqualTo
 
 from app.models import User
+
+
+class JobPostForm(FlaskForm):
+    job_type = SelectField('Job Type', choices=[
+        ('FT', 'Full Time'), ('PT', 'Part Time')])
+    description = StringField('Job Description', validators=[DataRequired()])
+    location = StringField('Location', validators=[DataRequired()])
+    salary = IntegerField('Salary Offer', validators=[DataRequired()])
+    maxWorker = IntegerField('Max Worker', validators=[DataRequired()])
 
 
 class EmployeeJobPostForm(FlaskForm):
@@ -30,7 +39,7 @@ class EmployeeJobPostForm(FlaskForm):
     submit = SubmitField('Post Job')
 
 
-class HirerJobPostForm(FlaskForm):
+class JobPostForm(FlaskForm):
     title = StringField(
         'Job Title',
         validators=[
@@ -38,27 +47,19 @@ class HirerJobPostForm(FlaskForm):
             Length(min=2, max=20),
         ]
     )
-    address = StringField(
+    location = StringField(
         'Location',
         validators=[
             DataRequired(),
             Length(min=3, max=20)
         ]
     )
-    salary_price = StringField(
+    salary = StringField(
         'Salary',
         validators=[
-
+            DataRequired()
         ]
     )
-    salary_category = SelectField(
-        choices=[
-            ('None', '<--- Optional --->'),
-            ('D', 'Per Day'),
-            ('H', 'Per Hour')
-        ]
-    )
-
     description = TextAreaField(
         'Job Description',
         validators=[

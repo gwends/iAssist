@@ -67,11 +67,11 @@
                         </div>
                         <div class="form-group">
                             <strong>
-                                {{ form.edu_background.label }}
+                                {{ form.birthDate.label }}
                             </strong>
-                            {{ form.edu_background(class="form-control", placeholder="Educational Background") }}
-                            {% if form.edu_background.errors %}
-                            {% for error in form.edu_background.errors %}
+                            {{ form.birthDate(class="form-control", type='date',placeholder="BirthDay") }}
+                            {% if form.birthDate.errors %}
+                            {% for error in form.birthDate.errors %}
                             <p class="text-danger">{{error}}</p>
                             {% endfor %}
                             {% endif %}

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, SubmitField, SelectField, TextAreaField, RadioField, PasswordField, BooleanField
+from wtforms import StringField, SubmitField, SelectField, DateField, TextAreaField, RadioField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, Regexp, ValidationError, AnyOf, Length, Email, EqualTo
 
 from app.models import User
@@ -34,27 +34,27 @@ class RegistrationForm(FlaskForm):
             DataRequired()
         ]
     )
-    firstname = StringField(
-        'First Name',
-        validators=[
-            DataRequired(),
-            Regexp('^[A-Za-z ]{2,30}$', message="Enter a valid First name.")
-        ]
-    )
-    lastname = StringField(
-        'Last Name',
-        validators=[
-            DataRequired(),
-            Regexp('^[A-Za-z ]{2,30}$', message="Enter a valid Last name.")
-        ]
-    )
-    gender = RadioField(
-        'Gender',
-        choices=[
-            ('M', 'Male'),
-            ('F', 'Female')
-        ]
-    )
+    # firstname = StringField(
+    #     'First Name',
+    #     validators=[
+    #         DataRequired(),
+    #         Regexp('^[A-Za-z ]{2,30}$', message="Enter a valid First name.")
+    #     ]
+    # )
+    # lastname = StringField(
+    #     'Last Name',
+    #     validators=[
+    #         DataRequired(),
+    #         Regexp('^[A-Za-z ]{2,30}$', message="Enter a valid Last name.")
+    #     ]
+    # )
+    # gender = RadioField(
+    #     'Gender',
+    #     choices=[
+    #         ('M', 'Male'),
+    #         ('F', 'Female')
+    #     ]
+    # )
     email = StringField(
         'Email',
         validators=[
@@ -62,12 +62,12 @@ class RegistrationForm(FlaskForm):
             Email()
         ]
     )
-    contact_no = StringField(
-        'Contact No.',
-        validators=[
-            DataRequired(),
-        ]
-    )
+    # contact_no = StringField(
+    #     'Contact No.',
+    #     validators=[
+    #         DataRequired(),
+    #     ]
+    # )
     password = PasswordField(
         'Password',
         validators=[
@@ -124,8 +124,8 @@ class EditProfile(FlaskForm):
         validators=[
         ]
     )
-    edu_background = StringField(
-        'Educational Background',
+    birthDate = DateField(
+        'Birth Date',
     )
     picture = FileField('Update Profile Picture', validators=[
                         FileAllowed(['jpg', 'png'])])
