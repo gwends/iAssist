@@ -78,9 +78,18 @@
                 </thead>
                 {% endif %}
             </table>
+
+            {% if job.user != current_user %}
+
             <p class="source text-right">Posted By: <span class="montserrat"><a href="{{url_for('users.home', username=job.user.username)}}">{{job.user}}</a></span></p>
 
-            {% if job.user != current_user and status == False %}
+            {% endif %}
+
+            {% if job.user != current_user%}
+
+
+            {% if not status %}
+
             <a href="{{url_for('jobs.job_apply', id=job.id)}}" class="btn btn-primary" id="editBTN">
                 {% if job.postType == 'Employer' %}
                 Apply
@@ -88,28 +97,107 @@
                 Hire
                 {% endif %}
             </a>
-            {% else %}
 
-            {% if status == 'Not Working' %}
+            {% else %}
             <a href="#" class="btn btn-primary disabled">Pending Request</a>
-            <a href="{{url_for('jobs.cancel_apply', id=job.id, username=current_user.username)}}" class="btn btn-danger">Cancel
-                Request</a>
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                Cancel Request
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Cancel Request</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            You are about to cancel your request for the job {{job.title}}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <a href="{{url_for('jobs.cancel_apply', id=job.id, username=current_user.username)}}" class="btn btn-danger">Yes</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% endif %}
 
             {% endif %}
         </div>
+
+        {% if job.user == current_user and working.first() %}
         <hr>
-        {% if job.user == current_user %}
-        <h3>People Applying:</h3>
+        <h3>People
+            {% if job.postType == 'Seeker' %}
+            You worked with
+            {% else %}
+            Who Works for You
+            {% endif %}
+            :</h3>
         <ul class="list-group">
-            {% for worker in job.workers %}
+            {% for worker in working %}
             <li class="list-group-item list-group-item-success">
 
                 {{worker.worker}}
                 <div style="float: right">
-                    <a href="{{url_for('jobs.cancel_apply', id=job.id, username=worker.worker.username)}}"><i class="fas fa-times text-danger"></i></a>
-                    <a href="{{url_for('jobs.accept_seeker', username=worker.worker.username, id=job.id)}}" class="ml-3"><i
-                            class="fas fa-check"></i></a>
+                    <a href="#" class="btn btn-sm btn-success">Done</a>
+                    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal{{worker.worker.id}}">
+                        Delete
+                    </button>
+                </div>
+            </li>
+            <!-- Button trigger modal -->
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal{{worker.worker.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{worker.worker.id}}"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel{{worker.worker.id}}">Delete User</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <h3 class="text-center source">You Are About to Delete User {{worker.worker.first_name}}.</h3>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                            <a href="{{url_for('jobs.cancel_apply', id=job.id, username=worker.worker.username)}}"
+                                class="btn btn-sm btn-danger">Yes</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <hr>
+
+        {% if job.user == current_user and notWorking.first()%}
+        <h3>People
+            {% if job.postType == 'Seeker' %}
+            Hiring You
+            {% else %}
+            Applying
+            {% endif %}
+            :</h3>
+        <ul class="list-group">
+            {% for worker in notWorking %}
+            <li class="list-group-item list-group-item-success">
+
+                {{worker.worker}}
+                <div style="float: right">
+                    <a href="{{url_for('jobs.accept_seeker', username=worker.worker.username, id=job.id)}}" class="btn btn-sm btn-success">Accept</a>
+                    <a href="{{url_for('jobs.cancel_apply', id=job.id, username=worker.worker.username)}}" class="btn btn-sm btn-danger">Decline</a>
                 </div>
             </li>
             {% endfor %}

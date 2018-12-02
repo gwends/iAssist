@@ -2,6 +2,7 @@ from app import db
 from flask import render_template, redirect, url_for, flash, request, Blueprint
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
+from datetime import datetime
 
 from app.jobs.forms import EmployerPostForm, SeekerPostForm, SearchForm
 from app.models import User, Job, Works
@@ -98,13 +99,15 @@ def job_search():
 @login_required
 def specific_job(id):
     job = Job.query.filter_by(id=id).first()
-    w = Works.query.filter(Works.jobID == job.id).filter(
-        Works.userID == current_user.id).first()
-    if(w):
-        status = w.status
+    working = Works.query.filter(Works.jobID == job.id).filter(
+        Works.status == 'Working')
+    notWorking = Works.query.filter(Works.jobID == job.id).filter(
+        Works.status == 'Not Working')
+    if Works.query.filter(Works.jobID == job.id).filter(Works.userID == current_user.id).first():
+        status = True
     else:
         status = False
-    return render_template('specific_job.html', title="Job Info", job=job, status=status, w=w)
+    return render_template('specific_job.html', title="Job Info", job=job, working=working, notWorking=notWorking, status=status)
 
 
 @jobs.route('/cancel_apply/<id>/<username>')
@@ -126,13 +129,17 @@ def job_apply(id):
     w = Works()
     job = Job.query.filter_by(id=id).first()
     user = User.query.filter_by(id=current_user.id).first()
-    w.worked_job = job
-    w.worker = current_user
-    job.workers.append(w)
-    db.session.add(w)
-    db.session.commit()
-    flash('Applied Successfully please wait for approval!', category='success')
-    return redirect(url_for('jobs.specific_job', id=job.id))
+    if Works.query.filter(Works.jobID == job.id).filter(Works.userID == user.id).first():
+        flash('You Already Applied for this job!', category='danger')
+        return redirect(url_for('jobs.specific_job', id=job.id))
+    else:
+        w.worked_job = job
+        w.worker = current_user
+        job.workers.append(w)
+        db.session.add(w)
+        db.session.commit()
+        flash('Applied Successfully please wait for approval!', category='success')
+        return redirect(url_for('jobs.specific_job', id=job.id))
 
 
 @jobs.route('/accept_seeker/<username>/<id>')

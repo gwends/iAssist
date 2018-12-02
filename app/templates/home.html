@@ -167,8 +167,32 @@
                 {% if current_user == user %}
 
                 <a href="{{url_for('jobs.edit_job', id=job.id)}}" class="btn btn-primary" id="editBTN">Edit Post</a>
-                <a href="{{url_for('jobs.delete_job', id=job.id)}}" class="btn btn-danger">Delete</a>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{job.id}}">
+                    Delete
+                </button>
 
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal{{job.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel{{job.id}}"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel{{job.id}}">Delete Post</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h3 class="text-center source">You are about to delete Post with title {{job.title}}</h3>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <a href="{{url_for('jobs.delete_job', id=job.id)}}" class="btn btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {% endif %}
             </div>
         </a>
