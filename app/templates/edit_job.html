@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+
+{% block link %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('static',filename='css/job_apply.css')}}">
+{% endblock link %}
+
+
+{% block page_content %}
+{% include 'layout/navbar.html' %}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-1 col-sm-1"></div>
+        <div class="col-10 col-sm-10">
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST" class="form mt-2" enctype="multipart/form-data" id='employerForm'>
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            <strong>
+                                {{ form.title.label }}
+                            </strong>
+                            {{ form.title(class="form-control", placeholder="Job Title") }}
+                            {% if form.title.errors %}
+                            {% for error in form.title.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                {{ form.description.label }}
+                            </strong>
+                            {{ form.description(class="form-control", placeholder="Job Description",rows="9",
+                            style="resize:none;") }}
+                            {% if form.description.errors %}
+                            {% for error in form.description.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                {{ form.job_type.label }}
+                            </strong>
+                            {{ form.job_type(class="form-control") }}
+                            {% if form.job_type.errors %}
+                            {% for error in form.job_type.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                {{ form.salary.label }}
+                            </strong>
+                            {{ form.salary(class="form-control", placeholder="Salary Offer") }}
+                            {% if form.salary.errors %}
+                            {% for error in form.salary.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                {{ form.location.label }}
+                            </strong>
+                            {{ form.location(class="form-control", placeholder="Job Location") }}
+                            {% if form.location.errors %}
+                            {% for error in form.location.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        {% if form.maxWorker %}
+                        <div class="form-group">
+                            <strong>
+                                {{ form.maxWorker.label }}
+                            </strong>
+                            {{ form.maxWorker(class="form-control",placeholder="Number of employee needed") }}
+                            {% if form.maxWorker.errors %}
+                            {% for error in form.maxWorker.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        {{ form.submit(class="btn btn-primary form-control") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-1 col-sm-1"></div>
+    </div>
+
+</div>
+{% endblock page_content %}
+
+
+{% block script %}
+{{ super() }}
+{% endblock script %}

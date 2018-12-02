@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block link %}
+{{super()}}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/job_search.css') }}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+    crossorigin="anonymous">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock link %}
+
+{% block page_content %}
+{% include 'layout/navbar.html' %}
+
+<div class="container">
+    <br>
+    <div class=" my_container">
+        <div class="mt-3 mb-5">
+
+            <h3 class="source mt-2 text-right text-primary">
+                Job {{job.postType}}
+            </h3>
+            <h1 class="text-center montserrat sections">{{job.title}}</h1>
+            <table class="source table table-sm table-borderless">
+                <thead>
+                    <tr>
+                        <td><strong>Job Type</strong></td>
+                        <td>
+
+                            {% if job.jobType == 'FT' %}
+                            Full Time
+                            {% else %}
+                            Part Time
+                            {% endif %}
+
+                        </td>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr>
+                        <td><strong>Job Description</strong></td>
+                        <td>{{job.description}}</td>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr>
+                        <td><strong>Indicated Location</strong></td>
+                        <td>{{job.location}}</td>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr>
+                        <td><strong>Indicated Salary</strong></td>
+                        <td>{{job.salary}}</td>
+                    </tr>
+                </thead>
+
+                {% if job.maxWorker %}
+
+                <thead>
+                    <tr>
+                        <td><strong>Availability</strong></td>
+                        <td>
+                            {{job.maxWorker}}
+                        </td>
+                    </tr>
+                </thead>
+                {% endif %}
+            </table>
+            {% if job.user != current_user %}
+            <a href="{{url_for('jobs.job_apply', id=job.id)}}" class="btn btn-primary" id="editBTN">
+                {% if job.postType == 'Employer' %}
+                Apply
+                {% else %}
+                Hire
+                {% endif %}
+            </a>
+            {% endif %}
+        </div>
+        <hr>
+        {% if job.user == current_user %}
+        <h3>People Applying:</h3>
+        <ul class="list-group">
+            {% for worker in job.workers %}
+            <li class="list-group-item list-group-item-success">
+                {{worker.worker}}
+                <div style="float: right">
+                    <a href="#"><i class="fas fa-times text-danger"></i></a>
+                    <a href="#" class="ml-3"><i class="fas fa-check"></i></a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock page_content %}

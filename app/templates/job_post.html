@@ -2,8 +2,8 @@
 
 
 {% block link %}
-<link rel="stylesheet" href="{{url_for('static',filename='css/job_apply.css')}}">
 {{super()}}
+<link rel="stylesheet" href="{{url_for('static',filename='css/job_apply.css')}}">
 {% endblock link %}
 
 
@@ -16,15 +16,149 @@
         <div class="col-10 col-sm-10">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="text-center">Edit Profile</h3>
+                    <h3 class="text-center" id="header">Job Seeker</h3>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <button class="btn btn-block btn-primary" id="job_seeker">Job Seeker</button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-block" id="employer">Employer</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <form method="POST" class="form mt-2" enctype="multipart/form-data">
-                        {{ form.hidden_tag() }}
+                    <form method="POST" class="form mt-2" enctype="multipart/form-data" id='employerForm'>
+                        {{ eform.hidden_tag() }}
                         <div class="form-group">
-                            <label for="first-name">First Name</label>
-                            <input type="text" name="first-name" class="form-control">
+                            <strong>
+                                {{ eform.title.label }}
+                            </strong>
+                            {{ eform.title(class="form-control", placeholder="Job Title") }}
+                            {% if eform.title.errors %}
+                            {% for error in eform.title.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
                         </div>
+                        <div class="form-group">
+                            <strong>
+                                {{ eform.description.label }}
+                            </strong>
+                            {{ eform.description(class="form-control", placeholder="Job Description",rows="9",
+                            style="resize:none;") }}
+                            {% if eform.description.errors %}
+                            {% for error in eform.description.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                {{ eform.job_type.label }}
+                            </strong>
+                            {{ eform.job_type(class="form-control") }}
+                            {% if eform.job_type.errors %}
+                            {% for error in eform.job_type.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                {{ eform.salary.label }}
+                            </strong>
+                            {{ eform.salary(class="form-control", placeholder="Salary Offer") }}
+                            {% if eform.salary.errors %}
+                            {% for error in eform.salary.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                {{ eform.location.label }}
+                            </strong>
+                            {{ eform.location(class="form-control", placeholder="Job Location") }}
+                            {% if eform.location.errors %}
+                            {% for error in eform.location.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                {{ eform.maxWorker.label }}
+                            </strong>
+                            {{ eform.maxWorker(class="form-control",placeholder="Number of employee needed") }}
+                            {% if eform.maxWorker.errors %}
+                            {% for error in eform.maxWorker.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        {{ eform.submit(class="btn btn-primary form-control") }}
+                    </form>
+                    <form method="POST" class="form mt-2" enctype="multipart/form-data" id='seekerForm'>
+                        {{ sform.hidden_tag() }}
+                        <div class="form-group">
+                            <strong>
+                                {{ sform.stitle.label }}
+                            </strong>
+                            {{ sform.stitle(class="form-control", placeholder="Job Title") }}
+                            {% if sform.stitle.errors %}
+                            {% for error in sform.stitle.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                {{ sform.sdescription.label }}
+                            </strong>
+                            {{ sform.sdescription(class="form-control", placeholder="What do you do?",rows="9",
+                            style="resize:none;") }}
+                            {% if sform.sdescription.errors %}
+                            {% for error in sform.sdescription.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                {{ sform.sjob_type.label }}
+                            </strong>
+                            {{ sform.sjob_type(class="form-control", placeholder="Firstname") }}
+                            {% if sform.sjob_type.errors %}
+                            {% for error in sform.sjob_type.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                {{ sform.ssalary.label }}
+                            </strong>
+                            {{ sform.ssalary(class="form-control", placeholder="Input Your Desired Salary") }}
+                            {% if sform.ssalary.errors %}
+                            {% for error in sform.ssalary.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <strong>
+                                {{ sform.slocation.label }}
+                            </strong>
+                            {{ sform.slocation(class="form-control", placeholder="Location where you prefer to work")
+                            }}
+                            {% if sform.slocation.errors %}
+                            {% for error in sform.slocation.errors %}
+                            <p class="text-danger">{{error}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        {{ sform.ssubmit(class="btn btn-primary form-control") }}
                     </form>
                 </div>
             </div>

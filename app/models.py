@@ -30,7 +30,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(64), index=True,
                          unique=True)
     email = db.Column(db.String(120), unique=True)
-    birthDate = db.Column(db.DateTime)
+    birthDate = db.Column(db.Date)
     password_hash = db.Column(db.String(128))
     contact = db.Column(db.String(20))
     address = db.Column(db.String(100))
@@ -69,10 +69,12 @@ class User(db.Model, UserMixin):
 class Job(db.Model):
     __tablename__ = 'Jobs'
     id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(24))
     jobType = db.Column(db.String(64))
-    description = db.Column(db.String(120))
+    description = db.Column(db.String(500))
     duration = db.Column(db.String(20))
     location = db.Column(db.String(128))
+    timeStamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     salary = db.Column(db.String(20))
     postType = db.Column(db.String(100))
     maxWorker = db.Column(db.Integer)

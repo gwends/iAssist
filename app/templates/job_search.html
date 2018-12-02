@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/job_search.css') }}">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
     crossorigin="anonymous">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 {% endblock link %}
 
 {% block page_content %}
@@ -40,35 +41,46 @@
     <br>
     <br>
 
-    {% if sform.category.data == 'Offer' %}
     {% for job in jobs %}
 
-    <div class="card mb-5">
-        <a href="{{url_for('jobs.specific_job_offer', id=job.id)}}">
-            <div class="card-body">
-                <h5 class="card-title">Job Title: {{ job.title }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Author: {{job.author}}</h6>
-                <p class="card-text">{{ job.description | truncate(40) | safe }}</p>
-            </div>
-        </a>
-    </div>
+    <a href="url_for('jobs.specific_job', id=job.id)}}" id='specific'>
+        <div class=" my_container mb-5">
+            <a href="{{url_for('jobs.specific_job', id=job.id)}}" id="specific">
+                <div class="mt-3">
 
+                    <h3 class="source mt-2 text-right text-primary">
+                        Job {{job.postType}}
+                    </h3>
+                    <h1 class="text-center montserrat sections">{{job.title}}</h1>
+                    <table class="source table table-sm table-borderless">
+                        <thead>
+                            <tr>
+                                <td><strong>Job Type</strong></td>
+                                <td>
+
+                                    {% if job.jobType == 'FT' %}
+                                    Full Time
+                                    {% else %}
+                                    Part Time
+                                    {% endif %}
+
+                                </td>
+                            </tr>
+                        </thead>
+                        <thead>
+                            <tr>
+                                <td><strong>Job Description</strong></td>
+                                <td>{{job.description}}</td>
+                            </tr>
+                    </table>
+                    <p class="source text-right">Posted By: <span class="montserrat">{{job.user}}</span></p>
+                </div>
+            </a>
+            <hr>
+
+        </div>
+    </a>
     {% endfor %}
-    {% else %}
-    {% for job in jobs %}
-
-    <div class="card mb-5">
-        <a href="{{url_for('jobs.specific_job_post', id=job.id)}}">
-            <div class="card-body">
-                <h5 class="card-title">{{ job.job_type }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">Author: {{job.author}}</h6>
-                <p class="card-text">{{ job.description | truncate(40) | safe }}</p>
-            </div>
-        </a>
-    </div>
-
-    {% endfor %}
-    {% endif %}
 
 
 </div>

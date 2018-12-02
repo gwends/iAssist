@@ -2,75 +2,105 @@
 
 {% block link %}
 {{super()}}
-<link rel="stylesheet" href="{{url_for('static', filename='css/sign_in.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='css/sign_up.css')}}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datedropper/2.0/datedropper.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datedropper/2.0/datedropper.min.css" />
 {% endblock link %}
 
 
 {% block page_content %}
 {% include 'layout/navbar.html' %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-1 col-sm-1"></div>
-        <div class="col-10 col-sm-10">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="text-center">Registration</h3>
-                </div>
-                <div class="card-body">
-                    <form method="POST" class="form mt-2">
-                        {{ form.hidden_tag() }}
-                        <div class="form-group">
-                            <strong>
-                                {{ form.username.label }}
-                            </strong>
-                            {{ form.username(class="form-control", placeholder="Username", autocorrect='off',
-                            autocomplete='off') }}
-                            {% if form.username.errors %}
-                            {% for error in form.username.errors %}
-                            <p class="text-danger">{{error}}</p>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <strong>
-                                {{ form.password.label }}
-                            </strong>
-                            {{ form.password(class="form-control", placeholder="Password") }}
-                            {% if form.password.errors %}
-                            {% for error in form.password.errors %}
-                            <p class="text-danger">{{error}}</p>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <strong>
-                                {{ form.check_password.label }}
-                            </strong>
-                            {{ form.check_password(class="form-control", placeholder="Repeat Password") }}
-                            {% if form.check_password.errors %}
-                            {% for error in form.check_password.errors %}
-                            <p class="text-danger">{{error}}</p>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                            <strong>
-                                {{ form.email.label }}
-                            </strong>
-                            {{ form.email(class="form-control", placeholder="Email") }}
-                            {% if form.email.errors %}
-                            {% for error in form.email.errors %}
-                            <p class="text-danger">{{error}}</p>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
-                        {{ form.submit(class="btn btn-primary form-control") }}
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-1 col-sm-1"></div>
+<div class="container mt-3">
+    {% for field in form.errors %}
+    {% for error in form.errors[field] %}
+    <div class="alert alert-error bg-light">
+        <button class="close" type="button" data-dismiss="alert">&times;</button>
+        <strong class="text-danger source">Error!</strong> {{error}}
     </div>
+    {% endfor %}
+    {% endfor %}
+</div>
+<h3 class="text-center mt-3 montserrat">REGISTRATION FORM</h3>
+<div class="mt-3" id="form">
+    <ul id="progressbar">
+        <li class="step active">Account Setup</li>
+        <li class="step">Personal Details</li>
+        <li class="step">Social Profiles</li>
+    </ul>
+    <div class="card">
+        <div class="card-body">
+            <h3 class="text-center source mb-3" id="formHeader">Your Login Details</h3>
+            <form method="POST" class="form" id="regForm">
+                {{ form.hidden_tag() }}
+                <div class="tab">
+                    <div class="form-group">
+                        {{ form.username(class="form-control", placeholder="Username", autocorrect='off',
+                        autocomplete='off') }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.password(class="form-control", placeholder="Password") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.check_password(class="form-control", placeholder="Repeat Password") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.email(class="form-control", placeholder="Email") }}
+                    </div>
+                </div>
+                <div class="tab">
+                    <div class="form-group">
+                        {{ form.firstname(class="form-control", placeholder="First Name") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.lastname(class="form-control", placeholder="Last Name") }}
+                    </div>
+                    <div class="form-group">
+                        {{form.gender(class="form-control")}}
+                    </div>
+                    <div class="form-group">
+                        {{ form.contact_no(class="form-control", placeholder="Contact Number") }}
+                    </div>
+                </div>
+                <div class="tab">
+                    <div class="form-group">
+                        {{form.location(class="form-control", placeholder="Current Address")}}
+                    </div>
+                    <div class="form-group">
+                        {{form.birthDate(class="form-control", id='date')}}
+                    </div>
+                    <div class="form-group">
+                        {{form.terms(class="form-check-input")}}
+                        I agree for the <a href="#">Terms and Agreements.</a>
+                    </div>
+                    <div class="form-group">
+                        {{form.agree(class="form-check-input")}}
+                        I agree the this is for Iligan City only.
+                        </label>
+                    </div>
+                </div>
+                <div id='buttons'>
+                    <div>
+                        <button type="button" class="btn submitButt form-control" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn submitButt form-control" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                    </div>
+                </div>
+            </form>
+            <div class="col-1 col-sm-1"></div>
+        </div>
 
+    </div>
 </div>
 {% endblock page_content %}
+
+
+{% block script %}
+
+<script>
+    $('#date').dateDropper();
+</script>
+<script src="{{url_for('static', filename='js/sign_up.js')}}"></script>
+{{super()}}
+{% endblock script %}
