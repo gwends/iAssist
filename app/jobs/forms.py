@@ -44,8 +44,8 @@ class SearchForm(FlaskForm):
     )
     category = SelectField(
         choices=[
-            ('Employer', 'Seeker'),
-            ('Seeker', 'Employer')
+            ('Seeker', 'Seeker'),
+            ('Employer', 'Employer')
         ]
     )
     submit = SubmitField(

@@ -26,10 +26,12 @@ function nextPrev(n) {
     // Exit the function if any field in the current tab is invalid:
     if (n == 1 && !validateForm()) return false;
     // Hide the current tab:
-    x[currentTab].style.display = "none";
-    // Increase or decrease the current tab by 1:
-    currentTab = currentTab + n;
-    // if you have reached the end of the form... :
+    if (currentTab < x.length) {
+        x[currentTab].style.display = "none";
+        // Increase or decrease the current tab by 1:
+        currentTab = currentTab + n;
+        // if you have reached the end of the form... :
+    }
     if (currentTab >= x.length) {
         //...the form gets submitted:
         document.getElementById("regForm").submit();

@@ -27,7 +27,7 @@ def job_post():
         db.session.add(post)
         db.session.commit()
         flash('Successfully posted job seeker!', category='success')
-        return redirect(url_for('users.home'))
+        return redirect(url_for('users.home', username=current_user.username))
     if eform.validate_on_submit():
         post.title = eform.title.data
         post.postType = 'Employer'
@@ -40,7 +40,7 @@ def job_post():
         db.session.add(post)
         db.session.commit()
         flash('Successfully posted job employer!', category='success')
-        return redirect(url_for('users.home'))
+        return redirect(url_for('users.home', username=current_user.username))
     else:
         return render_template('job_post.html', title='Job Post', eform=eform, sform=sform)
 
@@ -60,7 +60,7 @@ def edit_job(id):
         job.salary = form.salary.data
         db.session.commit()
         flash('Successfully Edited Job', category='success')
-        return redirect(url_for('users.home'))
+        return redirect(url_for('users.home', username=current_user.username))
     else:
         if job.maxWorker is not None:
             form.maxWorker.data = job.maxWorker
@@ -72,13 +72,13 @@ def edit_job(id):
         return render_template('edit_job.html', form=form, title='Edit Job')
 
 
-@jobs.route('/delete_job/<id>', methods=['POST', 'GET'])
+@jobs.route('/delete_job/<id>')
 def delete_job(id):
     job = Job.query.filter_by(id=id).first()
     db.session.delete(job)
     db.session.commit()
     flash('Successfully Deleted Job', category='success')
-    return redirect(url_for('users.home'))
+    return redirect(url_for('users.home', username=current_user.username))
 
 
 @jobs.route('/job_search', methods=['GET', 'POST'])
@@ -86,47 +86,64 @@ def delete_job(id):
 def job_search():
     search = SearchForm()
     if search.validate_on_submit():
-        if search.category.data == 'Offer':
-            pass
-            # jobs = Job.query.filter(
-            #   Job.title.contains('{}'.format(search.search.data))).order_by(Job.timetamp.desc())
-        else:
-            pass
-            # jobs = Job_Offer.query.filter(
-            #   Job_Offer.job_type.contains('{}'.format(search.search.data))).order_by(Job_Offer.timestamp.desc())
+        jobs = Job.query.filter(Job.postType == search.category.data).filter(
+            Job.title.contains(f'{search.search.data}')).order_by(Job.timeStamp.desc())
         return render_template('job_search.html', title='Search Result', sform=search, jobs=jobs)
     else:
         jobs = Job.query.order_by(Job.timeStamp.desc())
-        return render_template('job_search.html', title='Job Search', sform=search, jobs=jobs)
+        return render_template('job_search.html', title='Job Search', sform=search, jobs=jobs, check=True)
 
 
-@jobs.route('/specific_job/<id>', methods=['GET', 'POST'])
+@jobs.route('/specific_job/<id>')
 @login_required
 def specific_job(id):
     job = Job.query.filter_by(id=id).first()
-    return render_template('specific_job.html', title="Job Info", job=job)
+    w = Works.query.filter(Works.jobID == job.id).filter(
+        Works.userID == current_user.id).first()
+    if(w):
+        status = w.status
+    else:
+        status = False
+    return render_template('specific_job.html', title="Job Info", job=job, status=status, w=w)
 
 
-@jobs.route('/job_apply/<id>', methods=['POST', 'GET'])
+@jobs.route('/cancel_apply/<id>/<username>')
+@login_required
+def cancel_apply(id, username):
+    job = Job.query.filter_by(id=id).first()
+    user = User.query.filter_by(username=username).first()
+    w = Works.query.filter(Works.jobID == job.id).filter(
+        Works.userID == user.id).first()
+    db.session.delete(w)
+    db.session.commit()
+    flash('Successfully Canceled Request', category='success')
+    return redirect(url_for('jobs.specific_job', id=job.id))
+
+
+@jobs.route('/job_apply/<id>')
 @login_required
 def job_apply(id):
     w = Works()
     job = Job.query.filter_by(id=id).first()
     user = User.query.filter_by(id=current_user.id).first()
-    for attribute in job.workers:
-        if attribute.worker.id == user.id:
-            flash(
-                'You already applied to this job please wait for approval.', category='danger')
-            return redirect(url_for('users.home'))
     w.worked_job = job
     w.worker = current_user
     job.workers.append(w)
     db.session.add(w)
     db.session.commit()
     flash('Applied Successfully please wait for approval!', category='success')
-    return redirect(url_for('users.home'))
+    return redirect(url_for('jobs.specific_job', id=job.id))
 
 
-@jobs.route('/accepted/<id>')
-def accept():
-    pass
+@jobs.route('/accept_seeker/<username>/<id>')
+@login_required
+def accept_seeker(username, id):
+    job = Job.query.filter_by(id=id).first()
+    user = User.query.filter_by(username=username).first()
+    w = Works.query.filter(Works.jobID == job.id).filter(
+        Works.userID == user.id).first()
+    w.isAccepted = True
+    w.status = 'Working'
+    db.session.commit()
+    flash('Successfully Accepted Request!', category='success')
+    return redirect(url_for('jobs.specific_job', id=job.id))

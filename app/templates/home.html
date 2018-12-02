@@ -39,15 +39,19 @@
         <div class="row mt-3">
             <div class="col-4 text-center" id="profPic">
                 <img src="{{image_file}}" alt="Profile Picture" class="rounded-circle account-img">
+
+                {% if current_user == user %}
                 <form method="POST" enctype="multipart/form-data">
                     {{form.hidden_tag()}}
                     {{form.picture(class="inputfile")}}
                     {{form.picture.label}}
                     {{form.submit(class="btn btn-sm btn-success")}}
                 </form>
+                {% endif %}
+
             </div>
             <div class="col-7">
-                <h3 class="source">{{current_user.last_name}}, {{current_user.first_name}}</h3>
+                <h3 class="source">{{user.last_name}}, {{user.first_name}}</h3>
                 <hr>
                 <table class="source table table-sm table-borderless">
                     <thead>
@@ -59,19 +63,19 @@
                     <thead>
                         <tr>
                             <td><strong>Address</strong></td>
-                            <td>{{current_user.address}}</td>
+                            <td>{{user.address}}</td>
                         </tr>
                     </thead>
                     <thead>
                         <tr>
                             <td><strong>Email</strong></td>
-                            <td>{{current_user.email}}</td>
+                            <td>{{user.email}}</td>
                         </tr>
                     </thead>
                     <thead>
                         <tr>
                             <td><strong>Phone Number</strong></td>
-                            <td>{{current_user.contact}}</td>
+                            <td>{{user.contact}}</td>
                         </tr>
                     </thead>
                     <thead>
@@ -79,7 +83,7 @@
                             <td><strong>Gender</strong></td>
                             <td>
 
-                                {% if current_user.gender == "M" %}
+                                {% if user.gender == "M" %}
                                 Male
                                 {% else %}
                                 Female
@@ -89,7 +93,11 @@
                         </tr>
                     </thead>
                 </table>
+
+                {% if current_user == user %}
                 <a href="{{url_for('users.edit_profile')}}" class="btn btn-primary" id="editBTN">Edit Profile</a>
+                {% endif %}
+
             </div>
         </div>
     </div>
@@ -155,14 +163,27 @@
                     </thead>
                     {% endif %}
                 </table>
+
+                {% if current_user == user %}
+
                 <a href="{{url_for('jobs.edit_job', id=job.id)}}" class="btn btn-primary" id="editBTN">Edit Post</a>
                 <a href="{{url_for('jobs.delete_job', id=job.id)}}" class="btn btn-danger">Delete</a>
+
+                {% endif %}
             </div>
         </a>
         <hr>
         {% endfor %}
         {% else %}
-        <h1 class="text-center source">No Jobs Posted yet? click <a href="{{url_for('jobs.job_post')}}">here</a></h1>
+
+
+
+        <h1 class="text-center source">No Jobs Posted yet.
+            {% if current_user == user %}
+            click <a href="{{url_for('jobs.job_post')}}">here</a> to
+            post
+            one.
+            {% endif %} </h1>
         {% endif %}
 
     </div>

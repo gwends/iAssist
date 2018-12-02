@@ -54,7 +54,7 @@ def sign_in():
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('users.home')
+            next_page = url_for('users.home', username=current_user.username)
         return redirect(next_page)
     return render_template('sign_in.html', title='Sign In', form=form)
 
@@ -78,7 +78,7 @@ def edit_profile():
         current_user.address = form.location.data
         db.session.commit()
         flash('Successfully Edited Profile.', category='success')
-        return redirect(url_for('users.home'))
+        return redirect(url_for('users.home', username=current_user.username))
     else:
         form.firstname.data = current_user.first_name
         form.lastname.data = current_user.last_name
@@ -90,25 +90,26 @@ def edit_profile():
         return render_template('edit_profile.html', title='Edit Profile', form=form)
 
 
-@users.route('/home/', methods=['POST', 'GET'])
+@users.route('/home/<username>', methods=['POST', 'GET'])
 @login_required
-def home():
+def home(username):
     form = EditIMG()
-    job_posted = Job.query.filter(Job.userId == current_user.id).all()
-    current_age = current_user.get_age()
+    user = User.query.filter_by(username=username).first()
+    job_posted = Job.query.filter(Job.userId == user.id).all()
+    current_age = user.get_age()
     image_file = url_for(
-        'static', filename='profile_pics/' + current_user.image_file)
+        'static', filename='profile_pics/' + user.image_file)
     if form.validate_on_submit and request.method == 'POST':
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
-            current_user.image_file = picture_file
+            user.image_file = picture_file
             db.session.commit()
             flash('Changed Profile Picture.', category='success')
         else:
             flash('Failed', category='danger')
-        return redirect(url_for('users.home'))
+        return redirect(url_for('users.home', username=current_user.username))
     else:
-        return render_template('home.html', title='Profile', form=form, image_file=image_file, age=current_age, job_posted=job_posted)
+        return render_template('home.html', title='Profile', form=form, image_file=image_file, age=current_age, job_posted=job_posted, user=user)
 
 
 @users.route('/uploadIMG', methods=['POST'])

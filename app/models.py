@@ -18,6 +18,8 @@ class Works(db.Model):
     ratings = db.Column(db.Integer)
     isAccepted = db.Column(db.Boolean, default=False)
     message = db.Column(db.String(120))
+    status = db.Column(db.String(120), default="Not Working")
+    working_start_time = db.Column(db.DateTime)
     comments = db.Column(db.String(64))
     timeStamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     worked_job = db.relationship('Job', back_populates='workers')

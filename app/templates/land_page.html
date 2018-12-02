@@ -19,7 +19,7 @@
     <div class="w3-bar w3-white w3-card" id="myNavbar">
 
         {% if current_user.is_authenticated %}
-        <a href="{{url_for('users.home')}}" class="w3-bar-item w3-button w3-wide">iAssist</a>
+        <a href="{{url_for('users.home', username=current_user.username)}}" class="w3-bar-item w3-button w3-wide">iAssist</a>
         {% else %}
         <a href="#home" class="w3-bar-item w3-button w3-wide">iAssist</a>
         {% endif %}
