@@ -17,3 +17,26 @@ html, body {
 #category {
     border: none;
 }
+
+.jobs {
+    margin: 15px 0;
+    padding: 33px 15px 15px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, .64)
+}
+
+.specific {
+    text-decoration: none !important;
+    color: black !important;
+}
+
+
+table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+.td {
+    width: 30%;
+}

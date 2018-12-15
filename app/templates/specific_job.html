@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/job_search.css') }}">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
     crossorigin="anonymous">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/specific_job.css') }}">
 {% endblock link %}
 
 {% block page_content %}
@@ -70,7 +70,7 @@
 
                 <thead>
                     <tr>
-                        <td><strong>Availability</strong></td>
+                        <td><strong>Max Employee</strong></td>
                         <td>
                             {{job.maxWorker}}
                         </td>
@@ -81,9 +81,14 @@
 
             {% if job.user != current_user %}
 
-            <p class="source text-right">Posted By: <span class="montserrat"><a href="{{url_for('users.home', username=job.user.username)}}">{{job.user}}</a></span></p>
+            <p class="source text-right">Posted By: <span class="montserrat"><a href="{{url_for('users.home', username=job.user.username, post_page=1, hired_page=1, history_page=1)}}">{{job.user}}</a></span></p>
 
             {% endif %}
+
+            {% if current_user != job.user %}
+            <a href="{{url_for('jobs.create_message', id=job.id, username=current_user.username)}}" class="btn btn-success">Message</a>
+            {% endif %}
+
 
             {% if job.user != current_user%}
 
@@ -97,13 +102,24 @@
                 Hire
                 {% endif %}
             </a>
-
             {% else %}
-            <a href="#" class="btn btn-primary disabled">Pending Request</a>
+
+            {% for wjob in current_user.worked_jobs %}
+            {% if wjob.jobID == job.id and wjob.status == 'Working'%}
+            <a href="#" class="btn btn-success disabled">Working On the Job</a>
+            {% elif wjob.jobID == job.id and wjob.status == 'Not Working Read'%}
+            <a href="#" class="btn btn-success disabled">Pending Request</a>
+            {% elif wjob.jobID == job.id and wjob.status == 'Hiring'%}
+            <a href="{{url_for('jobs.job_done', username=current_user.username, id=job.id)}}" class="btn btn-success">Work
+                is
+                Done</a>
+            {% endif %}
+
+            {% endfor %}
 
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
-                Cancel Request
+                Cancel
             </button>
 
             <!-- Modal -->
@@ -118,7 +134,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            You are about to cancel your request for the job {{job.title}}
+                            You are about to cancel this job {{job.title}}
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -132,7 +148,7 @@
             {% endif %}
         </div>
 
-        {% if job.user == current_user and working.first() %}
+        {% if job.user == current_user and (job.worker_count() or job.hiring_count()) %}
         <hr>
         <h3>People
             {% if job.postType == 'Seeker' %}
@@ -142,12 +158,21 @@
             {% endif %}
             :</h3>
         <ul class="list-group">
-            {% for worker in working %}
+            {% for worker in work %}
+            {% if worker.status == 'Hiring' or worker.status == 'Working' %}
             <li class="list-group-item list-group-item-success">
+
+
 
                 {{worker.worker}}
                 <div style="float: right">
+
+                    {% if job.postType == 'Employer' %}
                     <a href="#" class="btn btn-sm btn-success">Done</a>
+                    {% else %}
+                    <a href="#" class="btn btn-sm btn-info disabled">Working On It!</a>
+                    {% endif %}
+
                     <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModal{{worker.worker.id}}">
                         Delete
                     </button>
@@ -177,12 +202,13 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
             {% endfor %}
         </ul>
         {% endif %}
         <hr>
 
-        {% if job.user == current_user and notWorking.first()%}
+        {% if job.user == current_user and job.applying_count() %}
         <h3>People
             {% if job.postType == 'Seeker' %}
             Hiring You
@@ -191,10 +217,11 @@
             {% endif %}
             :</h3>
         <ul class="list-group">
-            {% for worker in notWorking %}
+            {% for worker in work if worker.status == 'Not Working Read' %}
             <li class="list-group-item list-group-item-success">
-
-                {{worker.worker}}
+                <a href="{{url_for('users.home', username=worker.worker.username, post_page=1, hired_page=1, history_page=1)}}">
+                    {{worker.worker}}
+                </a>
                 <div style="float: right">
                     <a href="{{url_for('jobs.accept_seeker', username=worker.worker.username, id=job.id)}}" class="btn btn-sm btn-success">Accept</a>
                     <a href="{{url_for('jobs.cancel_apply', id=job.id, username=worker.worker.username)}}" class="btn btn-sm btn-danger">Decline</a>

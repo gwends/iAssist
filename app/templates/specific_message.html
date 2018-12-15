@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+
+{% block link %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('static', filename='css/feedback.css')}}">
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous">
+
+{% endblock link %}
+
+
+{% block page_content %}
+{% include 'layout/navbar.html' %}
+
+<div class="container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="mt-3 alert alert-{{category}}">
+        <button class="close" type="button" data-dismiss="alert">&times;</button>
+        {{message}}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
+<div class="container mt-3">
+
+
+    <div class=" my_container mb-5">
+        <h1 class="text-center montserrat mt-5 sections">Specific Message</h1>
+        <a href="{{url_for('jobs.specific_job', id=message.id)}}" class="specific">
+            <div class="mt-3 jobs">
+                <h1 class="text-center montserrat sections">In Job {{message.messaged_job.title}}</h1>
+                <table class="source table table-sm table-borderless">
+                    <thead>
+                        <tr>
+                            <td class="td"><strong>From</strong></td>
+                            <td>
+                                {{message.fromUser}}
+                            </td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td><strong>Message</strong></td>
+                            <td>{{message.content|truncate(100, True)}}</td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td class="td"><strong>To</strong></td>
+                            <td>
+                                {{message.toUser}}
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </a>
+        <hr>
+
+    </div>
+
+</div>
+{% endblock page_content %}
+
+
+{% block script %}
+{{super()}}
+<script src="{{url_for('static', filename='js/feedback.js')}}"></script>
+{% endblock script %}

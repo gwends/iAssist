@@ -19,7 +19,8 @@
     <div class="w3-bar w3-white w3-card" id="myNavbar">
 
         {% if current_user.is_authenticated %}
-        <a href="{{url_for('users.home', username=current_user.username)}}" class="w3-bar-item w3-button w3-wide">iAssist</a>
+        <a href="{{url_for('users.home', username=current_user.username, post_page=1, hired_page=1, history_page=1)}}"
+            class="w3-bar-item w3-button w3-wide">iAssist</a>
         {% else %}
         <a href="#home" class="w3-bar-item w3-button w3-wide">iAssist</a>
         {% endif %}
@@ -29,12 +30,14 @@
             <a href="#home" class="w3-bar-item w3-button">HOME</a>
             <a href="#about" class="w3-bar-item w3-button"> ABOUT</a>
             <a href="#team" class="w3-bar-item w3-button"> TEAM</a>
+            <a href="{{ url_for('jobs.job_search', page=1) }}" class="w3-bar-item w3-button"> JOB SEARCH</a>
+
 
             {% if current_user.is_anonymous %}
             <a href="{{ url_for('users.sign_in') }}" class="w3-bar-item w3-button"> SIGN IN</a>
             <a href="{{ url_for('users.sign_up') }}" class="w3-bar-item w3-button"> SIGN UP</a>
             {% else %}
-            <a href="{{ url_for('jobs.job_search') }}" class="w3-bar-item w3-button"> JOB SEARCH</a>
+            <a href="{{ url_for('jobs.job_search', page=1) }}" class="w3-bar-item w3-button"> JOB SEARCH</a>
             <a href="{{ url_for('jobs.job_post') }}" class="w3-bar-item w3-button"> JOB POST</a>
             <a href="{{ url_for('users.sign_out') }}" class="w3-bar-item w3-button">SIGN OUT</a>
             {% endif %}

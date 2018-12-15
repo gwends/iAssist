@@ -20,6 +20,16 @@ class EmployerPostForm(FlaskForm):
     submit = SubmitField('Post')
 
 
+class FeedbackForm(FlaskForm):
+    message = TextAreaField('Feedback Message', validators=[DataRequired()])
+    submit = SubmitField('Post')
+
+
+class MessageForm(FlaskForm):
+    content = TextAreaField('Message', validators=[DataRequired()])
+    submit = SubmitField('Send')
+
+
 class SeekerPostForm(FlaskForm):
     stitle = StringField('Job Title', validators=[DataRequired()])
     sdescription = TextAreaField(

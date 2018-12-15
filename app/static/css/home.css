@@ -20,9 +20,25 @@ body {
     font-size: 50px;
 }
 
+
+
+.specific {
+    text-decoration: none !important;
+    color: black !important;
+}
+
 .account-img {
     height: 200px;
     width: 200px;
+}
+
+table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+.td {
+    width: 30%;
 }
 
 
@@ -50,6 +66,61 @@ body {
     color: black;
 }
 
-#editBTN {
-    
+.jobs {
+    margin: 15px 0;
+    padding: 33px 15px 15px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, .64)
+}
+
+/* Badger
+------------------------- */
+
+[class*="badger"] {
+    position: relative
+}
+
+[class*="badger"]:after {
+    content: attr(data-badger);
+    position: absolute;
+    top: 0;
+    padding: 7px 14px;
+    font-size: 20px;
+    font-weight: bold;
+    background: #999;
+    color: #fff
+}
+.badger-left {
+    border-top-left-radius: 6px
+}
+
+.badger-right {
+    border-top-right-radius: 6px
+}
+
+.badger-left:after {
+    left: 0;
+    border-radius: 6px 0 6px 0
+}
+
+.badger-right:after {
+    right: 0;
+    border-radius: 0 6px 0 6px
+}
+
+.badger-danger:after {
+    background: #d9534f
+}
+
+.badger-warning:after {
+    background: #f0ad4e
+}
+
+.badger-success:after {
+    background: #5cb85c
+}
+
+.badger-info:after {
+    background: #5bc0de
 }

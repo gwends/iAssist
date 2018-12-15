@@ -68,7 +68,7 @@
                             <strong>
                                 {{ eform.salary.label }}
                             </strong>
-                            {{ eform.salary(class="form-control", placeholder="Salary Offer") }}
+                            {{ eform.salary(class="form-control", placeholder="Salary Offer in Pesos") }}
                             {% if eform.salary.errors %}
                             {% for error in eform.salary.errors %}
                             <p class="text-danger">{{error}}</p>
@@ -139,7 +139,8 @@
                             <strong>
                                 {{ sform.ssalary.label }}
                             </strong>
-                            {{ sform.ssalary(class="form-control", placeholder="Input Your Desired Salary") }}
+                            {{ sform.ssalary(class="form-control",
+                            placeholder="Input Your Desired Salary In Pesos") }}
                             {% if sform.ssalary.errors %}
                             {% for error in sform.ssalary.errors %}
                             <p class="text-danger">{{error}}</p>

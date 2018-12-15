@@ -49,49 +49,79 @@
 
 
     {% if jobs %}
-    {% for job in jobs %}
+    {% for job in jobs.items %}
 
-    <a href="url_for('jobs.specific_job', id=job.id)}}" id='specific'>
-        <div class=" my_container mb-5">
-            <a href="{{url_for('jobs.specific_job', id=job.id)}}" id="specific">
-                <div class="mt-3">
+    <div class=" my_container mb-5">
+        <a href="{{url_for('jobs.specific_job', id=job.id)}}" class="specific">
+            <div class="mt-3 jobs">
 
-                    Job {{job.postType}}
-                    </h3>
-                    <h1 class="text-center montserrat sections">{{job.title}}</h1>
-                    <table class="source table table-sm table-borderless">
-                        <thead>
-                            <tr>
-                                <td><strong>Job Type</strong></td>
-                                <td>
+                Job {{job.postType}}
+                </h3>
+                <h1 class="text-center montserrat sections">{{job.title}}</h1>
+                <table class="source table table-sm table-borderless">
+                    <thead>
+                        <tr>
+                            <td class="td"><strong>Job Type</strong></td>
+                            <td>
 
-                                    {% if job.jobType == 'FT' %}
-                                    Full Time
-                                    {% else %}
-                                    Part Time
-                                    {% endif %}
+                                {% if job.jobType == 'FT' %}
+                                Full Time
+                                {% else %}
+                                Part Time
+                                {% endif %}
 
-                                </td>
-                            </tr>
-                        </thead>
-                        <thead>
-                            <tr>
-                                <td><strong>Job Description</strong></td>
-                                <td>{{job.description}}</td>
-                            </tr>
-                    </table>
-                    <p class="source text-right">Posted By: <span class="montserrat">{{job.user}}</span></p>
-                </div>
-            </a>
-            <hr>
+                            </td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td><strong>Job Description</strong></td>
+                            <td>{{job.description|truncate(100, True)}}</td>
+                        </tr>
+                    </thead>
+                </table>
 
-        </div>
-    </a>
+                {% if current_user.is_anonymous %}
+                {% else %}
+                <p class="source text-right">Posted By: <span class="montserrat">{{job.user}}</span></p>
+                {% endif %}
+            </div>
+        </a>
+        <hr>
+
+    </div>
     {% endfor %}
+    <div class="text-center">
+        {% for page_num in jobs.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+
+        {% if page_num %}
+
+        {% if search %}
+
+        {% if jobs.page == page_num %}
+        <a href="{{url_for('jobs.search_result', category=c, search=s, page=page_num)}}" class="btn btn-info mb-4">{{page_num}}</a>
+        {% else %}
+        <a href="{{url_for('jobs.search_result', category=c, search=s, page=page_num)}}" class="btn btn-outline-info mb-4">{{page_num}}</a>
+        {% endif %}
+        {% else %}
+
+        {% if jobs.page == page_num %}
+        <a href="{{url_for('jobs.job_search', page=page_num)}}" class="btn btn-primary mb-4">{{page_num}}</a>
+        {% else %}
+        <a href="{{url_for('jobs.job_search', page=page_num)}}" class="btn btn-outline-primary mb-4">{{page_num}}</a>
+        {% endif %}
+        {% endif %}
+
+        {% else %}
+        ...
+        {% endif %}
+
+        {% endfor %}
+    </div>
     {% endif %}
 
 
-    {% if jobs.first()%}
+    {% if jobs.items%}
     {% else %}
     <div class=" my_container mb-5">
         <div class="mt-3">

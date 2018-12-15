@@ -11,6 +11,19 @@ def load_user(id):
     return User.query.get(int(id))
 
 
+class Message(db.Model):
+    __tablename__ = 'Messages'
+    userID = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
+    jobID = db.Column(db.Integer, db.ForeignKey('Jobs.id'), primary_key=True)
+    content = db.Column(db.String(400))
+    fromUser = db.Column(db.String(100))
+    toUser = db.Column(db.String(120))
+    status = db.Column(db.String(120), default="Not Read")
+    timeStamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    messaged_job = db.relationship('Job', back_populates='senders')
+    sender = db.relationship('User', back_populates='messaged_jobs')
+
+
 class Works(db.Model):
     __tablename__ = 'Works'
     userID = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
@@ -18,7 +31,7 @@ class Works(db.Model):
     ratings = db.Column(db.Integer)
     isAccepted = db.Column(db.Boolean, default=False)
     message = db.Column(db.String(120))
-    status = db.Column(db.String(120), default="Not Working")
+    status = db.Column(db.String(120), default="Not Working Not Read")
     working_start_time = db.Column(db.DateTime)
     comments = db.Column(db.String(64))
     timeStamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -45,6 +58,7 @@ class User(db.Model, UserMixin):
     jobPosted = db.relationship('Job', backref='user', lazy='dynamic')
     resumeId = db.Column(db.Integer, db.ForeignKey('Resume.id'))
     worked_jobs = db.relationship('Works', back_populates='worker')
+    messaged_jobs = db.relationship('Message', back_populates='sender')
 
     @property
     def password(self):
@@ -57,12 +71,62 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def get_notif(self):
+        n = 0
+        for Job in self.jobPosted:
+            w = Works.query.filter(Works.jobID == Job.id)
+            for worker in w:
+                if worker.status == 'Not Working Not Read':
+                    n = n + 1
+        return n
+
+    def get_messages(self):
+        pass
+
+    def get_employer(self):
+        w = Works.query.filter(Works.userID == self.id)
+        for job in w:
+            if job.status == 'Working':
+                return job.worked_job.user
+        return False
+
+    def get_hired_work(self, page):
+        w = Works.query.filter(Works.userID == self.id).filter(
+            Works.status == 'Hiring')
+        if w.first():
+            return w.paginate(per_page=2, page=int(page))
+        else:
+            return False
+
+    def get_current_work(self):
+        w = Works.query.filter(Works.userID == self.id)
+        for job in w:
+            if job.status == 'Working':
+                return job
+        jobs = self.jobPosted
+        for j in jobs:
+            if j.postType == 'Seeker':
+                wo = Works.query.filter(Works.jobID == j.id)
+                for wor in wo:
+                    if wor.status == 'Hiring':
+                        return wor
+        return False
+
+    def get_job_history(self, page):
+        w = db.session.query(Works).filter(Works.userID == self.id).join(Job, Job.id == Works.jobID).filter(
+            db.session._or(Works.status == 'Done Read', Works.status == 'Done Not Read'))
+        return w
+
     def get_age(self):
         today = date.today()
         if self.birthDate:
             return today.year - self.birthDate.year - ((today.month, today.day) < (self.birthDate.month, self.birthDate.day))
         else:
             return False
+
+    def paginat(sa_query, page, per_page=20, error_out=True):
+        sa_query.__class__ = BaseQuery
+        return sa_query.paginate(page, per_page, error_out)
 
     def __repr__(self):
         return '{} {}'.format(self.first_name, self.last_name)
@@ -71,7 +135,7 @@ class User(db.Model, UserMixin):
 class Job(db.Model):
     __tablename__ = 'Jobs'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(24))
+    title = db.Column(db.String(120))
     jobType = db.Column(db.String(64))
     description = db.Column(db.String(500))
     duration = db.Column(db.String(20))
@@ -82,6 +146,52 @@ class Job(db.Model):
     maxWorker = db.Column(db.Integer)
     userId = db.Column(db.Integer, db.ForeignKey('Users.id'))
     workers = db.relationship('Works', back_populates='worked_job')
+    senders = db.relationship('Message', back_populates='messaged_job')
+
+    def notification_count(self):
+        w = Works.query.filter(Works.jobID == self.id)
+        n = 0
+        for worker in w:
+            if worker.status == 'Not Working Not Read':
+                n = n + 1
+            if worker.status == 'Done Not Read':
+                n = n + 1
+        return n
+
+    def worker_count(self):
+        w = Works.query.filter(Works.jobID == self.id)
+        n = 0
+        for worker in w:
+            if worker.status == 'Working':
+                n = n + 1
+        return n
+
+    def hiring_count(self):
+        w = Works.query.filter(Works.jobID == self.id)
+        n = 0
+        for worker in w:
+            if worker.status == 'Hiring':
+                n = n + 1
+        return n
+
+    def applying_count(self):
+        w = Works.query.filter(Works.jobID == self.id)
+        n = 0
+        for worker in w:
+            if worker.status == 'Not Working Read':
+                n = n + 1
+        return n
+
+    def is_full(self):
+        w = Works.query.filter(Works.jobID == self.id)
+        n = 0
+        for worker in w:
+            if worker.status == 'Working':
+                n = n + 1
+        if n == len(self.workers):
+            return True
+        else:
+            return False
 
     def __repr__(self):
         return f'Posted by {self.user}.'

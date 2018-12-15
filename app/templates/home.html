@@ -10,6 +10,9 @@
 {% block page_content %}
 {% include 'layout/navbar.html' %}
 
+{% set current_job = user.get_current_work() %}
+{% set hire = user.get_hired_work(current_hired_page) %}
+{% set history = user.get_job_history(current_history_page) %}
 <div class="container">
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -33,7 +36,7 @@
         {% endfor %}
     </div>
 </div>
-<div class="container mb-5">
+<div class="container">
     <h1 class="text-center montserrat mt-5 sections">PROFILE</h1>
     <div class="my_container">
         <div class="row mt-3">
@@ -92,26 +95,220 @@
                             </td>
                         </tr>
                     </thead>
+                    <thead>
+                        <tr>
+                            <td><strong>Availability Status</strong></td>
+                            <td>
+
+                                {% if user.isEmployed %}
+                                Employed
+                                {% else %}
+                                Available
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                    </thead>
                 </table>
 
                 {% if current_user == user %}
-                <a href="{{url_for('users.edit_profile')}}" class="btn btn-primary" id="editBTN">Edit Profile</a>
+                <a href="{{url_for('users.edit_profile')}}" class="btn btn-primary">Edit Profile</a>
                 {% endif %}
 
             </div>
         </div>
     </div>
+    <div class="my_container mt-5">
+        <ul class="nav justify-content-center nav-pills nav-fill">
+            <li class="nav-item">
+                <a class="nav-link btn-danger" id="postBtn" href="#postBtn">Posts</a>
+            </li>
+
+            {% if current_user == user %}
+
+            {% if current_job %}
+            <li class="nav-item">
+                <a class="nav-link" id="currentBtn" href="#currentBtn">Current Work</a>
+            </li>
+            {% endif %}
+
+
+            {% if hire %}
+            <li class="nav-item">
+                <a class="nav-link" id="hiredBtn" href="#hiredBtn">Hired Worker</a>
+            </li>
+            {% endif %}
+
+            {% endif %}
+
+
+            {% if history %}
+            <li class="nav-item">
+                <a class="nav-link" id="historyBtn" href="#historyBtn">Job History</a>
+            </li>
+            {% endif %}
+
+        </ul>
+    </div>
 </div>
 <br>
-<div class="container mb-5">
+
+{% if current_user == user %}
+
+<div class="container" id="currentForm">
+
+    {% if current_job %}
+    <h1 class="text-center montserrat mt-5 sections">Currently Working On</h1>
+    <div class="my_container">
+        <a href="{{url_for('jobs.specific_job', id=current_job.worked_job.id)}}" class="specific">
+            <div class="mt-3 jobs">
+                <h1 class="text-center montserrat sections">{{current_job.worked_job.title}}</h1>
+                <table class="source table table-sm table-borderless">
+                    <thead>
+                        <tr>
+                            <td class="td"><strong>Job Type</strong></td>
+                            <td>
+
+                                {% if current_job.worked_job.jobType == 'FT' %}
+                                Full Time
+                                {% else %}
+                                Part Time
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td><strong>Job Description</strong></td>
+                            <td>{{current_job.worked_job.description|truncate(100, True)}}</td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td><strong>Indicated Location</strong></td>
+                            <td>{{current_job.worked_job.location}}</td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td><strong>Indicated Salary</strong></td>
+                            <td>{{current_job.worked_job.salary}}</td>
+                        </tr>
+                    </thead>
+
+                    {% if current_job.worked_job.maxWorker %}
+
+                    <thead>
+                        <tr>
+                            <td><strong>Max Employee</strong></td>
+                            <td>{{current_job.worked_job.maxWorker}}
+                            </td>
+                        </tr>
+                    </thead>
+                    {% endif %}
+                </table>
+            </div>
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+{% endif %}
+
+
+{% if current_user == user %}
+
+
+<div class="container" id="hiredForm">
+
+    {% if hire %}
+    <h1 class="text-center montserrat mt-5 sections">Currently Hired</h1>
+    <div class="my_container">
+
+        {% for hired in hire.items %}
+        <a href="{{url_for('jobs.specific_job', id=hired.worked_job.id)}}" class="specific">
+            <div class="mt-3 jobs">
+                <p class="text-primary"><strong>{{hired.worked_job.user.last_name}},
+                        {{hired.worked_job.user.first_name}}</strong></p>
+                <h1 class="text-center montserrat sections">{{hired.worked_job.title}}</h1>
+                <table class="source table table-sm table-borderless">
+                    <thead>
+                        <tr>
+                            <td class="td"><strong>Job Type</strong></td>
+                            <td>
+
+                                {% if hired.worked_job.jobType == 'FT' %}
+                                Full Time
+                                {% else %}
+                                Part Time
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td><strong>Job Description</strong></td>
+                            <td>{{hired.worked_job.description|truncate(100, True)}}</td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td><strong>Indicated Location</strong></td>
+                            <td>{{hired.worked_job.location}}</td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td><strong>Indicated Salary</strong></td>
+                            <td>{{hired.worked_job.salary}}</td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </a>
+
+        {% endfor %}
+        <div class="text-center">
+            {% for page_num in hire.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+
+            {% if page_num %}
+            {% if hire.page == page_num %}
+            <a href="{{url_for('users.home', username=user.username, post_page=current_post_page, hired_page=page_num, history_page=current_history_page)}}"
+                class="btn btn-info">{{page_num}}</a>
+            {% else %}
+            <a href="{{url_for('users.home', username=user.username, post_page=current_post_page, hired_page=page_num, history_page=current_history_page)}}"
+                class="btn btn-outline-info">{{page_num}}</a>
+            {% endif %}
+
+            {% else %}
+            ...
+            {% endif %}
+
+            {% endfor %}
+        </div>
+
+    </div>
+    {% endif %}
+
+</div>
+{% endif %}
+<div class="container" id="postForm">
+
     <h1 class="text-center montserrat mt-5 sections">JOB POSTED</h1>
     <div class=" my_container">
 
         {% if job_posted %}
 
-        {% for job in job_posted %}
-        <a href="{{url_for('jobs.specific_job', id=job.id)}}" id="specific">
-            <div class="mt-3 mb-5">
+        {% for job in job_posted.items %}
+        <a href="{{url_for('jobs.specific_job', id=job.id)}}" class="specific">
+            <div class="mt-3 jobs
+                {% if job.user == current_user and job.notification_count()%}
+                mb-5 badger-left badger-success"
+                data-badger="Notification ({{job.notification_count()}})
+                {% endif %}
+                ">
 
                 <h3 class="source mt-2 text-right text-primary">
                     Job {{job.postType}}
@@ -120,7 +317,7 @@
                 <table class="source table table-sm table-borderless">
                     <thead>
                         <tr>
-                            <td><strong>Job Type</strong></td>
+                            <td class="td"><strong>Job Type</strong></td>
                             <td>
 
                                 {% if job.jobType == 'FT' %}
@@ -135,7 +332,7 @@
                     <thead>
                         <tr>
                             <td><strong>Job Description</strong></td>
-                            <td>{{job.description}}</td>
+                            <td>{{job.description|truncate(100, True)}}</td>
                         </tr>
                     </thead>
                     <thead>
@@ -155,9 +352,8 @@
 
                     <thead>
                         <tr>
-                            <td><strong>Availability</strong></td>
-                            <td>
-                                {{job.maxWorker}}
+                            <td><strong>Max Employee</strong></td>
+                            <td>{{job.maxWorker}}
                             </td>
                         </tr>
                     </thead>
@@ -166,7 +362,7 @@
 
                 {% if current_user == user %}
 
-                <a href="{{url_for('jobs.edit_job', id=job.id)}}" class="btn btn-primary" id="editBTN">Edit Post</a>
+                <a href="{{url_for('jobs.edit_job', id=job.id)}}" class="btn btn-primary">Edit Post</a>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{job.id}}">
                     Delete
@@ -196,11 +392,26 @@
                 {% endif %}
             </div>
         </a>
-        <hr>
         {% endfor %}
+        <div class="text-center">
+            {% for page_num in job_posted.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+
+            {% if page_num %}
+            {% if job_posted.page == page_num %}
+            <a href="{{url_for('users.home', username=user.username, post_page=page_num, hired_page=current_hired_page, history_page=current_history_page)}}"
+                class="btn btn-info">{{page_num}}</a>
+            {% else %}
+            <a href="{{url_for('users.home', username=user.username, post_page=page_num, hired_page=current_hired_page, history_page=current_history_page)}}"
+                class="btn btn-outline-info">{{page_num}}</a>
+            {% endif %}
+
+            {% else %}
+            ...
+            {% endif %}
+
+            {% endfor %}
+        </div>
         {% else %}
-
-
 
         <h1 class="text-center source">No Jobs Posted yet.
             {% if current_user == user %}
@@ -209,8 +420,80 @@
             one.
             {% endif %} </h1>
         {% endif %}
+    </div>
+</div>
+
+<div class="container" id="historyForm">
+    {% if history %}
+    <h1 class="text-center montserrat mt-5 sections">Job History</h1>
+    <div class="my_container">
+
+        {% for hist in history.items %}
+        <a href="{{url_for('jobs.specific_job', id=hired.worked_job.id)}}" class="specific">
+            <div class="mt-3 jobs">
+                <p class="text-primary"><strong>{{hist.worked_job.user.last_name}},
+                        {{hist.worked_job.user.first_name}}</strong></p>
+                <h1 class="text-center montserrat sections">{{hist.worked_job.title}}</h1>
+                <table class="source table table-sm table-borderless">
+                    <thead>
+                        <tr>
+                            <td class="td"><strong>Job Type</strong></td>
+                            <td>
+
+                                {% if hist.worked_job.jobType == 'FT' %}
+                                Full Time
+                                {% else %}
+                                Part Time
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td><strong>Job Description</strong></td>
+                            <td>{{hist.worked_job.description|truncate(100, True)}}</td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td><strong>Indicated Location</strong></td>
+                            <td>{{hist.worked_job.location}}</td>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td><strong>Indicated Salary</strong></td>
+                            <td>{{hist.worked_job.salary}}</td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </a>
+
+        {% endfor %}
+        <div class="text-center">
+            {% for page_num in hist.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+
+            {% if page_num %}
+            {% if hist.page == page_num %}
+            <a href="{{url_for('users.home', username=user.username, post_page=current_post_page, hired_page=page_num, history_page=current_history_page)}}"
+                class="btn btn-info">{{page_num}}</a>
+            {% else %}
+            <a href="{{url_for('users.home', username=user.username, post_page=current_post_page, hired_page=page_num, history_page=current_history_page)}}"
+                class="btn btn-outline-info">{{page_num}}</a>
+            {% endif %}
+
+            {% else %}
+            ...
+            {% endif %}
+
+            {% endfor %}
+        </div>
 
     </div>
+    {% endif %}
+
 </div>
 {% endblock page_content %}
 

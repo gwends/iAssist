@@ -54,7 +54,8 @@ def sign_in():
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('users.home', username=current_user.username)
+            next_page = url_for(
+                'users.home', username=current_user.username, post_page=1, hired_page=1, history_page=1)
         return redirect(next_page)
     return render_template('sign_in.html', title='Sign In', form=form)
 
@@ -78,7 +79,7 @@ def edit_profile():
         current_user.address = form.location.data
         db.session.commit()
         flash('Successfully Edited Profile.', category='success')
-        return redirect(url_for('users.home', username=current_user.username))
+        return redirect(url_for('users.home', username=current_user.username, post_page=1, hired_page=1, history_page=1))
     else:
         form.firstname.data = current_user.first_name
         form.lastname.data = current_user.last_name
@@ -90,12 +91,13 @@ def edit_profile():
         return render_template('edit_profile.html', title='Edit Profile', form=form)
 
 
-@users.route('/home/<username>', methods=['POST', 'GET'])
+@users.route('/home/<username>/<post_page>/<hired_page>/<history_page>', methods=['POST', 'GET'])
 @login_required
-def home(username):
+def home(username, post_page, hired_page, history_page):
     form = EditIMG()
     user = User.query.filter_by(username=username).first()
-    job_posted = Job.query.filter(Job.userId == user.id).all()
+    job_posted = Job.query.filter(Job.userId == user.id).paginate(
+        per_page=2, page=int(post_page))
     current_age = user.get_age()
     image_file = url_for(
         'static', filename='profile_pics/' + user.image_file)
@@ -107,9 +109,10 @@ def home(username):
             flash('Changed Profile Picture.', category='success')
         else:
             flash('Failed', category='danger')
-        return redirect(url_for('users.home', username=current_user.username))
+        return redirect(url_for('users.home', username=current_user.username, post_page=1, hired_page=1, history_page=1))
     else:
-        return render_template('home.html', title='Profile', form=form, image_file=image_file, age=current_age, job_posted=job_posted, user=user)
+        return render_template('home.html', title='Profile', form=form, image_file=image_file, age=current_age, job_posted=job_posted, user=user,
+                               current_post_page=post_page, current_hired_page=hired_page, current_history_page=history_page)
 
 
 @users.route('/uploadIMG', methods=['POST'])

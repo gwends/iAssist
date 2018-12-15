@@ -1,0 +1,36 @@
+*, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #8bc8a5;
+}
+
+.my_container {
+    width: 70%;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+/* #27AE60 */
+.sections {
+    font-weight: 500;
+    font-size: 50px;
+}
+
+
+
+.specific {
+    text-decoration: none !important;
+    color: black !important;
+}
+
+.jobs {
+    margin: 15px 0;
+    padding: 33px 15px 15px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, .64)
+}

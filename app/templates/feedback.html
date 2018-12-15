@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+
+{% block link %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('static', filename='css/feedback.css')}}">
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous">
+
+{% endblock link %}
+
+
+{% block page_content %}
+{% include 'layout/navbar.html' %}
+
+<div class="container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="mt-3 alert alert-{{category}}">
+        <button class="close" type="button" data-dismiss="alert">&times;</button>
+        {{message}}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <div class="container mt-3">
+        {% for field in form.errors %}
+        {% for error in form.errors[field] %}
+        <div class="alert alert-error bg-light">
+            <button class="close" type="button" data-dismiss="alert">&times;</button>
+            <strong class="text-danger source">Error!</strong> {{error}}
+        </div>
+        {% endfor %}
+        {% endfor %}
+    </div>
+</div>
+<div class="container mt-3">
+    {% for field in form.errors %}
+    {% for error in form.errors[field] %}
+    <div class="alert alert-error bg-light">
+        <button class="close" type="button" data-dismiss="alert">&times;</button>
+        <strong class="text-danger source">Error!</strong> {{error}}
+    </div>
+    {% endfor %}
+    {% endfor %}
+</div>
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="text-center source" id="formHeader">Feedback and Rating for {{user.first_name}} in the job
+                "<a href="{{url_for('jobs.specific_job', id=job.id)}}" style="text-decoration: none">{{job.title}}</a>"</h1>
+            <form method="POST" class="form mt-5">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.message(class="form-control", placeholder="Enter Feedback Message", rows="9",
+                    style="resize:none;") }}
+                    {% if form.message.errors %}
+                    {% for error in form.message.errors %}
+                    <p class="text-danger">{{error}}</p>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="form-group" id="rating-ability-wrapper">
+                    <label class="control-label" for="rating">
+                        <span class="field-label-header text-info">Please Rate the specific Work that's Done!</span><br>
+                        <span class="field-label-info"></span>
+                        <input type="hidden" id="selected_rating" name="selected_rating" value="" required="required">
+                    </label>
+                    <h2 class="bold rating-header" style="">
+                        <span class="selected-rating">0</span><small> / 5</small>
+                    </h2>
+                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="1" id="rating-star-1">
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="2" id="rating-star-2">
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="3" id="rating-star-3">
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="4" id="rating-star-4">
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btnrating btn btn-default btn-lg" data-attr="5" id="rating-star-5">
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                    </button>
+                </div>
+                {{ form.submit(class="btn btn-primary form-control",id='submitbtn') }}
+            </form>
+        </div>
+
+    </div>
+</div>
+{% endblock page_content %}
+
+
+{% block script %}
+{{super()}}
+<script src="{{url_for('static', filename='js/feedback.js')}}"></script>
+{% endblock script %}
