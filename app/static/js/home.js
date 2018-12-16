@@ -63,3 +63,4 @@ historyBtn.click(() => {
     postForm.css('display', 'none');
     historyForm.css('display', 'block');
 });
+

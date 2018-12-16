@@ -14,7 +14,6 @@
 {% include 'layout/navbar.html' %}
 
 <div class="container">
-
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     {% for category, message in messages %}
@@ -28,11 +27,8 @@
 </div>
 <div class="container mt-3">
 
-    {{current_user.postedJobs}}
-
-    {% if message %}
-    {% for message in messages.items %}
-
+    {% if m %}
+    {% for message in m %}
     <div class=" my_container mb-5">
         <h1 class="text-center montserrat mt-5 sections">Messages</h1>
         <a href="{{url_for('jobs.specific_job', id=message.id)}}" class="specific">

@@ -168,7 +168,7 @@
                 <div style="float: right">
 
                     {% if job.postType == 'Employer' %}
-                    <a href="#" class="btn btn-sm btn-success">Done</a>
+                    <a href="{{url_for('jobs.job_done', username=worker.worker.username, id=job.id)}}" class="btn btn-sm btn-success">Done</a>
                     {% else %}
                     <a href="#" class="btn btn-sm btn-info disabled">Working On It!</a>
                     {% endif %}

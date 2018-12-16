@@ -12,7 +12,7 @@
 
 {% set current_job = user.get_current_work() %}
 {% set hire = user.get_hired_work(current_hired_page) %}
-{% set history = user.get_job_history(current_history_page) %}
+{% set history = user.get_job_history() %}
 <div class="container">
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -299,8 +299,7 @@
     <h1 class="text-center montserrat mt-5 sections">JOB POSTED</h1>
     <div class=" my_container">
 
-        {% if job_posted %}
-
+        {% if job_posted.items %}
         {% for job in job_posted.items %}
         <a href="{{url_for('jobs.specific_job', id=job.id)}}" class="specific">
             <div class="mt-3 jobs
@@ -428,68 +427,52 @@
     <h1 class="text-center montserrat mt-5 sections">Job History</h1>
     <div class="my_container">
 
-        {% for hist in history.items %}
-        <a href="{{url_for('jobs.specific_job', id=hired.worked_job.id)}}" class="specific">
-            <div class="mt-3 jobs">
-                <p class="text-primary"><strong>{{hist.worked_job.user.last_name}},
-                        {{hist.worked_job.user.first_name}}</strong></p>
-                <h1 class="text-center montserrat sections">{{hist.worked_job.title}}</h1>
-                <table class="source table table-sm table-borderless">
-                    <thead>
-                        <tr>
-                            <td class="td"><strong>Job Type</strong></td>
-                            <td>
+        {% for hist in history %}
+        <div class="mt-3 jobs">
 
-                                {% if hist.worked_job.jobType == 'FT' %}
-                                Full Time
-                                {% else %}
-                                Part Time
-                                {% endif %}
+            {% if hist.worked_job.postType == 'Seeker' %}
+            <p class="text-primary"><strong>{{hist.worker.last_name}},
+                    {{hist.worker.first_name}}</strong></p>
 
-                            </td>
-                        </tr>
-                    </thead>
-                    <thead>
-                        <tr>
-                            <td><strong>Job Description</strong></td>
-                            <td>{{hist.worked_job.description|truncate(100, True)}}</td>
-                        </tr>
-                    </thead>
-                    <thead>
-                        <tr>
-                            <td><strong>Indicated Location</strong></td>
-                            <td>{{hist.worked_job.location}}</td>
-                        </tr>
-                    </thead>
-                    <thead>
-                        <tr>
-                            <td><strong>Indicated Salary</strong></td>
-                            <td>{{hist.worked_job.salary}}</td>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        </a>
+            {% else %}
+            <p class="text-primary"><strong>{{hist.worked_job.user.last_name}},
+                    {{hist.worked_job.user.first_name}}</strong></p>
+
+            {% endif %}
+
+            <h1 class="text-center montserrat sections">{{hist.worked_job.title}}</h1>
+            <table class="source table table-sm table-borderless">
+                <thead>
+                    <tr>
+                        <td class="td"><strong>Job Type</strong></td>
+                        <td>
+
+                            {% if hist.worked_job.jobType == 'FT' %}
+                            Full Time
+                            {% else %}
+                            Part Time
+                            {% endif %}
+
+                        </td>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr>
+                        <td><strong>FeedBack Message</strong></td>
+                        <td>{{hist.message}}</td>
+                    </tr>
+                </thead>
+
+                <thead>
+                    <tr>
+                        <td><strong>Rating</strong></td>
+                        <td>{{hist.ratings}}</td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
 
         {% endfor %}
-        <div class="text-center">
-            {% for page_num in hist.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-
-            {% if page_num %}
-            {% if hist.page == page_num %}
-            <a href="{{url_for('users.home', username=user.username, post_page=current_post_page, hired_page=page_num, history_page=current_history_page)}}"
-                class="btn btn-info">{{page_num}}</a>
-            {% else %}
-            <a href="{{url_for('users.home', username=user.username, post_page=current_post_page, hired_page=page_num, history_page=current_history_page)}}"
-                class="btn btn-outline-info">{{page_num}}</a>
-            {% endif %}
-
-            {% else %}
-            ...
-            {% endif %}
-
-            {% endfor %}
-        </div>
 
     </div>
     {% endif %}

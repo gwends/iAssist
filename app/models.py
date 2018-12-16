@@ -112,10 +112,20 @@ class User(db.Model, UserMixin):
                         return wor
         return False
 
-    def get_job_history(self, page):
-        w = db.session.query(Works).filter(Works.userID == self.id).join(Job, Job.id == Works.jobID).filter(
-            db.session._or(Works.status == 'Done Read', Works.status == 'Done Not Read'))
-        return w
+    def get_job_history(self):
+        w = Works.query.filter(Works.userID == self.id)
+        jobs = self.jobPosted
+        job = []
+        for work in w:
+            if work.status == "Done Not Read" or work.status == "Done Read":
+                job.append(work)
+        for j in jobs:
+            if j.postType == 'Seeker':
+                wo = Works.query.filter(Works.jobID == j.id).first()
+                if wo:
+                    if wo.status == "Done Not Read" or wo.status == "Done Read":
+                        job.append(wo)
+        return job
 
     def get_age(self):
         today = date.today()
@@ -123,10 +133,6 @@ class User(db.Model, UserMixin):
             return today.year - self.birthDate.year - ((today.month, today.day) < (self.birthDate.month, self.birthDate.day))
         else:
             return False
-
-    def paginat(sa_query, page, per_page=20, error_out=True):
-        sa_query.__class__ = BaseQuery
-        return sa_query.paginate(page, per_page, error_out)
 
     def __repr__(self):
         return '{} {}'.format(self.first_name, self.last_name)

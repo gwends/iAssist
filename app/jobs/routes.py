@@ -129,6 +129,8 @@ def specific_job(id):
         for work in working:
             if work.status == 'Not Working Not Read':
                 work.status = 'Not Working Read'
+            if work.status == "Done Not Read":
+                work.status = "Done Read"
     db.session.commit()
     return render_template('specific_job.html', title="Job Info", job=job, status=status, work=working)
 
@@ -185,11 +187,19 @@ def accept_seeker(username, id):
         flash('Successfully Accepted Job!', category='success')
         return redirect(url_for('jobs.specific_job', id=job.id))
     else:
-        if job.user.isEmployed is False:
+        if job.user.isEmployed:
             flash('User is already Employed!', category='danger')
             return redirect(url_for('jobs.specific_job', id=job.id))
         w = Works.query.filter(Works.jobID == job.id).filter(
             Works.userID == user.id).first()
+        wo = Works.query.filter(Works.jobID == job.id)
+        n = 0
+        for wor in wo:
+            if wor.status == 'Working':
+                n = n + 1
+        if int(job.maxWorker) == n or int(job.maxWorker) < n:
+            flash("Maximum Worker Achieved Can't Accept more worker!", category='danger')
+            return redirect(url_for('jobs.specific_job', id=job.id))
         w.status = 'Working'
         user.isEmployed = True
         w.isAccepted = True
@@ -203,10 +213,12 @@ def accept_seeker(username, id):
 def job_done(username, id):
     form = FeedbackForm()
     job = Job.query.filter(Job.id == id).first()
+    user = User.query.filter(User.username == username).first()
     if job.postType == 'Employer':
-        user = User.query.filter(User.id == job.user.id).first()
+        current_user.isEmployed = False
     else:
-        user = User.query.filter(User.username == username).first()
+        u = User.query.filter(User.id == job.user.id).first()
+        u.isEmployed = False
     if request.method == 'POST' and form.validate_on_submit():
         print(request.form['selected_rating'])
         print(user)
@@ -214,11 +226,11 @@ def job_done(username, id):
             Works.userID == user.id).first()
         work.status = 'Done Not Read'
         work.message = form.message.data
-        work.rating = request.form['selected_rating']
-        if work.rating:
+        work.ratings = request.form['selected_rating']
+        if work.ratings:
             db.session.commit()
             flash('Success', category='success')
-            return redirect(url_for('jobs.job_done', username=username, id=id))
+            return redirect(url_for('jobs.specific_job', id=id))
         else:
             flash('Please rate the User.', category='danger')
             form.message.data = work.message
@@ -230,16 +242,8 @@ def job_done(username, id):
 @jobs.route('/message/<page>')
 @login_required
 def message(page):
-    m = Message.query.filter(Message.userID == current_user.id).join(Job).filter(Job.id==Message.jobID).paginate(
-        per_page=2, page=int(page))
-    return render_template('messages.html', messages=m, title="Messages")
-
-@jobs.route('/test')
-def test123():
-    s = current_user.get_job_history(1)
-    m = db.session.query(Works).filter(Works.userID == current_user.id).join(Message, Message.jobID == Works.jobID).all()
-    print(m)
-    return render_template('test.html', message=m, title="TEST")
+    m = Message.query.filter(Message.userID == current_user.id)
+    return render_template('messages.html', m=m, title="Messages")
 
 @jobs.route('/message/<id>/<username>', methods=['GET', 'POST'])
 @login_required
@@ -265,6 +269,7 @@ def create_message(id, username):
         m.content = form.content.data
         m.fromUser = current_user
         m.toUser = j.user
+        db.session.add(m)
         db.session.commit()
         flash('Message Sent!', category='success')
         return redirect(url_for('users.home', username=current_user.username, post_page=1, hired_page=1, history_page=1))
