@@ -1,0 +1,10 @@
+tr a {
+    display: block;
+    text-decoration: none;
+    color: black !important;
+    padding: 16px 0;
+ }
+
+tr a:hover {
+    text-decoration: none;
+}

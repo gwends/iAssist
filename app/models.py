@@ -13,15 +13,14 @@ def load_user(id):
 
 class Message(db.Model):
     __tablename__ = 'Messages'
-    userID = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
-    jobID = db.Column(db.Integer, db.ForeignKey('Jobs.id'), primary_key=True)
-    content = db.Column(db.String(400))
-    fromUser = db.Column(db.String(100))
-    toUser = db.Column(db.String(120))
+    id = db.Column(db.Integer, primary_key=True)
+    fromUserID = db.Column(db.Integer)
+    toUserID = db.Column(db.Integer)
+    jobID = db.Column(db.Integer)
+    jobTitle = db.Column(db.String(120))
+    content = db.Column(db.String(1200))
     status = db.Column(db.String(120), default="Not Read")
     timeStamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    messaged_job = db.relationship('Job', back_populates='senders')
-    sender = db.relationship('User', back_populates='messaged_jobs')
 
 
 class Works(db.Model):
@@ -56,9 +55,7 @@ class User(db.Model, UserMixin):
     image_file = db.Column(
         db.String(120), nullable=False, default='default.png')
     jobPosted = db.relationship('Job', backref='user', lazy='dynamic')
-    resumeId = db.Column(db.Integer, db.ForeignKey('Resume.id'))
     worked_jobs = db.relationship('Works', back_populates='worker')
-    messaged_jobs = db.relationship('Message', back_populates='sender')
 
     @property
     def password(self):
@@ -80,8 +77,13 @@ class User(db.Model, UserMixin):
                     n = n + 1
         return n
 
-    def get_messages(self):
-        pass
+    def get_message_notif(self):
+        n = 0
+        m = Message.query.filter(Message.toUserID == self.id)
+        for message in m:
+            if message.status == 'Not Read':
+                n = n + 1
+        return n
 
     def get_employer(self):
         w = Works.query.filter(Works.userID == self.id)
@@ -152,7 +154,6 @@ class Job(db.Model):
     maxWorker = db.Column(db.Integer)
     userId = db.Column(db.Integer, db.ForeignKey('Users.id'))
     workers = db.relationship('Works', back_populates='worked_job')
-    senders = db.relationship('Message', back_populates='messaged_job')
 
     def notification_count(self):
         w = Works.query.filter(Works.jobID == self.id)
@@ -201,11 +202,3 @@ class Job(db.Model):
 
     def __repr__(self):
         return f'Posted by {self.user}.'
-
-
-class Resume(db.Model):
-    __tablename__ = 'Resume'
-    id = db.Column(db.Integer, primary_key=True)
-    education = db.Column(db.String(200))
-    workExperience = db.Column(db.String(400))
-    user = db.relationship("User", uselist=False, backref='resume')

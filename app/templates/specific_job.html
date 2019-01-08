@@ -86,7 +86,8 @@
             {% endif %}
 
             {% if current_user != job.user %}
-            <a href="{{url_for('jobs.create_message', id=job.id, username=current_user.username)}}" class="btn btn-success">Message</a>
+            <a href="{{url_for('jobs.create_message', jobID=job.id, fromUserID=current_user.id, toUserID=job.user.id)}}"
+                class="btn btn-success">Message</a>
             {% endif %}
 
 

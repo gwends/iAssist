@@ -49,8 +49,16 @@
 <div class="container">
     <div class="card">
         <div class="card-body">
-            <h1 class="text-center source" id="formHeader">Message For the job
-                "<a href="{{url_for('jobs.specific_job', id=job_id)}}" style="text-decoration: none">{{job.title}}</a>"</h1>
+            <h1 class="text-center source" id="formHeader">
+
+                {% if job.user == current_user %}
+                Reply On the Message of job
+                {% else %}
+                Message For the job
+                {% endif %}
+
+
+                "<a href="{{url_for('jobs.specific_job', id=job.id)}}" style="text-decoration: none">{{job.title}}</a>"</h1>
             <form method="POST" class="form mt-5">
                 {{ form.hidden_tag() }}
                 <div class="form-group">

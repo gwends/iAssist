@@ -30,36 +30,34 @@
 
 
     <div class=" my_container mb-5">
-        <h1 class="text-center montserrat mt-5 sections">Specific Message</h1>
-        <a href="{{url_for('jobs.specific_job', id=message.id)}}" class="specific">
-            <div class="mt-3 jobs">
-                <h1 class="text-center montserrat sections">In Job {{message.messaged_job.title}}</h1>
-                <table class="source table table-sm table-borderless">
-                    <thead>
-                        <tr>
-                            <td class="td"><strong>From</strong></td>
-                            <td>
-                                {{message.fromUser}}
-                            </td>
-                        </tr>
-                    </thead>
-                    <thead>
-                        <tr>
-                            <td><strong>Message</strong></td>
-                            <td>{{message.content|truncate(100, True)}}</td>
-                        </tr>
-                    </thead>
-                    <thead>
-                        <tr>
-                            <td class="td"><strong>To</strong></td>
-                            <td>
-                                {{message.toUser}}
-                            </td>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        </a>
+
+        {% if current_user.id != message.fromUserID %}
+        <h1 class="text-center montserrat mt-5 sections">Someone Messages You on Your posted Job </h1>
+        {% else %}
+        <h1 class="text-center montserrat mt-5 sections">Your Message/Reply on the Job </h1>
+        {% endif %}
+
+        <div class="mt-3 jobs">
+            <h1 class="text-center montserrat sections">"{{message.jobTitle}}"</h1>
+            <table class="source table table-sm table-borderless mt-5">
+                <thead>
+                    <tr>
+                        <td style="width:20%"><strong>Message</strong></td>
+                        <td style="width:80$">{{message.content}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Time Sent</strong></td>
+                        <td>{{message.timeStamp.now().date()}}</td>
+                    </tr>
+                </thead>
+            </table>
+
+            {% if current_user.id != message.fromUserID %}
+            <a href="{{url_for('jobs.create_message', jobID=message.jobID, fromUserID=message.toUserID, toUserID=message.fromUserID)}}"
+                class="mt-5 btn-block btn-success btn">Reply</a>
+            {% endif %}
+
+        </div>
         <hr>
 
     </div>

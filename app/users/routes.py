@@ -19,8 +19,8 @@ def sign_up():
     if form.validate_on_submit():
         user = User()
         user.username = form.username.data
-        user.first_name = form.firstname.data
-        user.last_name = form.lastname.data
+        user.first_name = form.firstname.data.title()
+        user.last_name = form.lastname.data.title()
         user.gender = form.gender.data
         user.email = form.email.data
         user.contact = form.contact_no.data
@@ -96,7 +96,7 @@ def edit_profile():
 def home(username, post_page, hired_page, history_page):
     form = EditIMG()
     user = User.query.filter_by(username=username).first()
-    job_posted = Job.query.filter(Job.userId == user.id).paginate(
+    job_posted = Job.query.filter(Job.userId == user.id).order_by(Job.timeStamp.desc()).paginate(
         per_page=2, page=int(post_page))
     current_age = user.get_age()
     image_file = url_for(

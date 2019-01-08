@@ -3,7 +3,7 @@
 
 {% block link %}
 {{super()}}
-<link rel="stylesheet" href="{{url_for('static', filename='css/feedback.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='css/messages.css')}}">
 <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
     crossorigin="anonymous">
 
@@ -25,61 +25,150 @@
     {% endif %}
     {% endwith %}
 </div>
-<div class="container mt-3">
+<div class="container">
+    <div class="my_container mt-5">
+        <ul class="nav justify-content-center nav-pills nav-fill">
+            <li class="nav-item">
+                <a class="nav-link btn-danger" id="sentBtn" href="#sentBtn">Sent</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="receiveBtn" href="#receiveBtn">Received</a>
+            </li>
 
-    {% if m %}
-    {% for message in m %}
-    <div class=" my_container mb-5">
-        <h1 class="text-center montserrat mt-5 sections">Messages</h1>
-        <a href="{{url_for('jobs.specific_job', id=message.id)}}" class="specific">
-            <div class="mt-3 jobs">
-                <h1 class="text-center montserrat sections">In Job {{message.messaged_job.title}}</h1>
-                <table class="source table table-sm table-borderless">
-                    <thead>
-                        <tr>
-                            <td class="td"><strong>From</strong></td>
-                            <td>
-                                {{message.fromUser}}
-                            </td>
-                        </tr>
-                    </thead>
-                    <thead>
-                        <tr>
-                            <td><strong>Message</strong></td>
-                            <td>{{message.content|truncate(100, True)}}</td>
-                        </tr>
-                    </thead>
-                    <thead>
-                        <tr>
-                            <td class="td"><strong>To</strong></td>
-                            <td>
-                                {{message.toUser}}
-                            </td>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        </a>
-        <hr>
-
+        </ul>
     </div>
-    {% endfor %}
-    {% else %}
-    <div class="text-center mt-5">
-        <p><span class="text-center montserrat mt-5 sections" style="font-size: 75px;">No Messages Received Yet</span>
-        </p>
-        <a href="{{url_for('users.home', username=current_user.username, post_page=1, hired_page=1, history_page=1)}}"
-            style="font-size: 30px; text-decoration: none;">
-            Back To Home
-        </a>
-    </div>
-    {% endif %}
+    <div id="sent" class="mt-5">
 
+        {% if s.items.length %}
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" style="width:10%">#</th>
+                    <th scope="col" style="width:40%">Message</th>
+                    <th scope="col" style="width:30%">Job</th>
+                    <th scope="col" style="width:20%">TimeStamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for message1 in s.items %}
+                <tr>
+                    <th scope="row">
+                        <a href="{{url_for('jobs.specific_message', messageID=message1.id)}}">
+                            {{loop.index}}.
+                        </a>
+                    </th>
+                    <th>
+                        <a href="{{url_for('jobs.specific_message', messageID=message1.id)}}">
+                            {{message1.content|truncate(50, True)}}
+                        </a>
+                    </th>
+                    <th>
+                        <a href="{{url_for('jobs.specific_message', messageID=message1.id)}}">
+                            {{message1.jobTitle|truncate(30, True)}}
+                        </a>
+                    </th>
+                    <th>
+                        <a href="{{url_for('jobs.specific_message', messageID=message1.id)}}">
+                            {{message1.timeStamp.now().date()}}
+                        </a>
+                    </th>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-center">
+            {% for page_num2 in s.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+
+            {% if page_num2 %}
+            {% if s.page == page_num2 %}
+            <a href="{{url_for('jobs.message', page1=page_num1, page2=page_num2)}}" class="btn btn-info mb-4">{{page_num2}}</a>
+            {% else %}
+            <a href="{{url_for('jobs.message', page1=page_num1, page2=page_num2)}}" class="btn btn-outline-info mb-4">{{page_num2}}</a>
+            {% endif %}
+            {% else %}
+            ...
+            {% endif %}
+
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="my_container">
+            <h1 class="text-center">No Messages Sent !</h1>
+        </div>
+        {% endif %}
+    </div>
+    <div id="receive" class="mt-5">
+
+        {% if r.items.length %}
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col" style="width:10%">#</th>
+                    <th scope="col" style="width:40%">Message</th>
+                    <th scope="col" style="width:30%">Job</th>
+                    <th scope="col" style="width:20%">TimeStamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for message2 in r.items %}
+
+                {% if message2.status == 'Not Read' %}
+                <tr class="bg-info">
+                    {% else %}
+                <tr>
+                    {% endif %}
+
+                    <th scope="row">
+                        <a href="{{url_for('jobs.specific_message', messageID=message2.id)}}">
+                            {{loop.index}}.
+                        </a>
+                    </th>
+                    <th>
+                        <a href="{{url_for('jobs.specific_message', messageID=message2.id)}}">
+                            {{message2.content|truncate(50, True)}}
+                        </a>
+                    </th>
+                    <th>
+                        <a href="{{url_for('jobs.specific_message', messageID=message2.id)}}">
+                            {{message2.jobTitle|truncate(30, True)}}
+                        </a>
+                    </th>
+                    <th>
+                        <a href="{{url_for('jobs.specific_message', messageID=message2.id)}}">
+                            {{message2.timeStamp.now().date()}}
+                        </a>
+                    </th>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="text-center">
+            {% for page_num1 in s.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+
+            {% if page_num1 %}
+            {% if s.page == page_num1 %}
+            <a href="{{url_for('jobs.message', page1=page_num1, page2=page_num2)}}" class="btn btn-info mb-4">{{page_num1}}</a>
+            {% else %}
+            <a href="{{url_for('jobs.message', page1=page_num1, page2=page_num2)}}" class="btn btn-outline-info mb-4">{{page_num1}}</a>
+            {% endif %}
+            {% else %}
+            ...
+            {% endif %}
+
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="my_container">
+            <h1 class="text-center">No Messages Received !</h1>
+        </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock page_content %}
 
 
 {% block script %}
 {{super()}}
-<script src="{{url_for('static', filename='js/feedback.js')}}"></script>
+<script src="{{url_for('static', filename='js/messages.js')}}"></script>
 {% endblock script %}

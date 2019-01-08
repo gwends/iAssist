@@ -19,7 +19,13 @@
                 <span class="badge badge-primary">{{current_user.get_notif()}}</span>
                 {% endif %}
                 HOME</a>
-            <a class="nav-item nav-link" href="{{url_for('jobs.message', page=1)}}">MESSAGE</a>
+            <a class="nav-item nav-link" href="{{url_for('jobs.message', page1=1, page2=1)}}">
+
+                {% if current_user.get_message_notif() %}
+                <span class="badge badge-primary">{{current_user.get_message_notif()}}</span>
+                {% endif %}
+
+                MESSAGE</a>
             <a class="nav-item nav-link" href="{{url_for('jobs.job_search', page=1)}}">JOB SEARCH</a>
             <a class="nav-item nav-link" href="{{url_for('jobs.job_post')}}">JOB POST</a>
             <a class="nav-item nav-link" href="{{url_for('users.sign_out')}}">SIGN OUT</a>

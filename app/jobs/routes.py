@@ -239,36 +239,40 @@ def job_done(username, id):
         return render_template('feedback.html', form=form, job=job, user=user)
 
 
-@jobs.route('/message/<page>')
+@jobs.route('/messages/<page1>/<page2>')
 @login_required
-def message(page):
-    m = Message.query.filter(Message.userID == current_user.id)
-    return render_template('messages.html', m=m, title="Messages")
+def message(page1, page2):
+    r = Message.query.filter(Message.toUserID == current_user.id).order_by(
+            Message.timeStamp.desc()).paginate(per_page=10, page=int(page1))
+    s = Message.query.filter(Message.fromUserID == current_user.id).order_by(
+            Message.timeStamp.desc()).paginate(per_page=10, page=int(page2))
+    return render_template('messages.html', r=r, s=s, title="Messages")
 
-@jobs.route('/message/<id>/<username>', methods=['GET', 'POST'])
+@jobs.route('/message/<messageID>', methods=['GET', 'POST'])
 @login_required
-def specific_message(id, username):
-    u = User.query.filter(User.username == username).first()
-    m = Message.query.filter(Message.jobID == id).filter(
-        Message.userID == user.id).first()
-    m.status = 'Read'
-    db.session.commit()
-    return render_template('specific_message.html', message=m, title="Specific Message")
+def specific_message(messageID):
+    m = Message.query.filter(Message.id == messageID).first()
+    if (m.fromUserID) is (current_user.id) or (m.toUserID) is (current_user.id):
+        m.status = 'Read'
+        db.session.commit()
+        print(m.status)
+        return render_template('specific_message.html', message=m, title="Specific Message")
+    else:
+        return render_template('404.html'), 404
 
 
-@jobs.route('/create_message/<id>/<username>', methods=['GET', 'POST'])
+@jobs.route('/create_message/<jobID>/<fromUserID>/<toUserID>', methods=['GET', 'POST'])
 @login_required
-def create_message(id, username):
+def create_message(jobID, fromUserID, toUserID):
     form = MessageForm()
-    j = Job.query.filter(Job.id==id).first()
+    j = Job.query.filter(Job.id==jobID).first()
     if request.method == 'POST' and form.validate_on_submit():
         m = Message()
-        m.messaged_job = j
-        m.sender = current_user
-        j.senders.append(m)
         m.content = form.content.data
-        m.fromUser = current_user
-        m.toUser = j.user
+        m.fromUserID = fromUserID
+        m.toUserID = toUserID
+        m.jobTitle = j.title
+        m.jobID = j.id
         db.session.add(m)
         db.session.commit()
         flash('Message Sent!', category='success')
