@@ -1,0 +1,131 @@
+*, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #8bc8a5;
+}
+
+.container {
+    margin-right: 50px !important;
+    margin-left: 50px !important;
+}
+
+.my_container {
+    width: 110%;
+    margin: 0 auto;
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+}
+/* #27AE60 */
+.sections {
+    font-weight: 400;
+    font-size: 50px;
+}
+
+
+
+.specific {
+    text-decoration: none !important;
+    color: black !important;
+}
+
+.account-img {
+    height: 50%;
+    width: 50%;
+}
+
+table {
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+.td {
+    width: 30%;
+}
+
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+    z-index: -1;
+}
+
+.inputfile + label {
+    font-size: 1em;
+    padding: 5%;
+    font-weight: 700;
+    color: #27AE60;
+    border-radius: 10px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    color: black;
+}
+
+.jobs {
+    margin: 15px 0;
+    padding: 33px 15px 15px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, .64)
+}
+
+/* Badger
+------------------------- */
+
+[class*="badger"] {
+    position: relative
+}
+
+[class*="badger"]:after {
+    content: attr(data-badger);
+    position: absolute;
+    top: 0;
+    padding: 7px 14px;
+    font-size: 20px;
+    font-weight: bold;
+    background: #999;
+    color: #fff
+}
+.badger-left {
+    border-top-left-radius: 6px
+}
+
+.badger-right {
+    border-top-right-radius: 6px
+}
+
+.badger-left:after {
+    left: 0;
+    border-radius: 6px 0 6px 0
+}
+
+.badger-right:after {
+    right: 0;
+    border-radius: 0 6px 0 6px
+}
+
+.badger-danger:after {
+    background: #d9534f
+}
+
+.badger-warning:after {
+    background: #f0ad4e
+}
+
+.badger-success:after {
+    background: #5cb85c
+}
+
+.badger-info:after {
+    background: #5bc0de
+}
