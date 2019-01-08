@@ -125,10 +125,12 @@
     </div>
         </div>
     </div>
-    <div class="my_container mt-5">
+    </div>  
+    <div class="col-md-8">
+        <div class="my_container" style="margin-left: 45px !important;">
         <ul class="nav justify-content-center nav-pills nav-fill">
             <li class="nav-item">
-                <a class="nav-link btn-danger" id="postBtn" href="#postBtn">Post</a>
+                <a class="nav-link btn-danger" id="postBtn" href="#postBtn">Posts</a>
             </li>
 
             {% if current_user == user %}
@@ -157,8 +159,6 @@
 
         </ul>
     </div>
-    </div>  
-    <div class="col-md-8">
     {% if current_user == user %}
 
 <div class="container" id="currentForm">
